@@ -35,4 +35,20 @@ export default {
   // typographer: false, // smart quotes and other typographic improvements
   // preserveExtension: false, // drop .html from URLs
   // preserveIndex: false, // drop /index from URLs
+
+  imports: [
+    "@observablehq/plot",
+    "d3",
+    "d3-cloud",
+    "compromise",
+    "@observablehq/htl",
+    "vega",
+    "vega-lite",
+    "vega-embed"
+  ],
+
+  runtime: {
+    // Add the d3, htl, and Plot to the global namespace
+    observeAlso: ["d3", "Plot", "htl"]
+  }
 };
