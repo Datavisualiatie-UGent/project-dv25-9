@@ -1,0 +1,10 @@
+reviews:
+- eerst word cloud
+- daarna filter, omdat "the", "or" enzo bovenaan stonden
+- daarna filter met adjectief + substantief om nuttige combinaties zoals "nice graphics", "great gameplay" te vinden
+- TODO: mss genre ipv game dropdown
+
+world map:
+- namen van landen in data kwamen niet overeen met namen van landen op de kaart (geoJSON ofzoiets?), dus vertaal map
+- antarctica van de kaart gehaald (446 spelers)
+- TODO: mss genre ipv game dropdown

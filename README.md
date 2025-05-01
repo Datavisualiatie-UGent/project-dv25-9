@@ -2,7 +2,7 @@
 
 ## Running the project
 
-### Installing the data
+### Downloading the data
 
 > This is outdated. TODO: update this
 
@@ -20,6 +20,20 @@ kaggle config set -n path.kaggle_token_file -v path/to/your/kaggle.json
 
 3. Run the script to install the data:
 ```shell
-cd data
+cd src/data
 python download_data.py
+```
+
+### Installing dependencies
+
+Go back to the root of the repository and install the needed packages:
+```shell
+npm install
+```
+
+### Starting the website
+
+Run the development server:
+```shell
+npm run dev
 ```

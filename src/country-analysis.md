@@ -99,34 +99,112 @@ function worldMap(data, {width} = {}) {
   }
   
   // Create a color scale for the choropleth
-  const colorScale = d3.scaleSequential(d3.interpolateBlues)
-    .domain([0, d3.max(data, d => d.downloads) * 0.7]); // Using 0.7 to make colors more visible
+  const colorScale = d3.scaleSqrt()
+    .domain([1, d3.max(data, d => d.downloads)])
+    .range(["#c6dbef", "#08519c"]); // Lighter blue to dark blue
+    
   
   // Create a lookup map for faster access
   const countryLookup = new Map(data.map(d => [d.country, d.downloads]));
+
+  // Create a mapping between GeoJSON country names and your data's country names
+  const countryNameMapping = {
+    "Russia": "Russian Federation",
+    "W. Sahara": "Western Sahara",
+    "Dem. Rep. Congo": "Congo, The Democratic Republic of the",
+    "Dominican Rep.": "Dominican Republic",
+    "Falkland Is.": "Falkland Islands (Malvinas)",
+    "Fr. S. Antarctic Lands": "French Southern Territories",
+    "Bolivia": "Bolivia, Plurinational State of",
+    "Venezuela": "Venezuela, Bolivarian Republic of",
+    "Central African Rep.": "Central African Republic",
+    "Eq. Guinea": "Equatorial Guinea",
+    "eSwatini": "Eswatini",
+    "Palestine": "Palestine, State of",
+    "Laos": "Lao People's Democratic Republic",
+    "Vietnam": "Viet Nam",
+    "North Korea": "Korea, Democratic People's Republic of",
+    "South Korea": "Korea, Republic of",
+    "Iran": "Iran, Islamic Republic of",
+    "Syria": "Syrian Arab Republic",
+    "Moldova": "Moldova, Republic of",
+    "Turkey": "Türkiye",
+    "Solomon Is.": "Solomon Islands",
+    "Taiwan": "Taiwan, Province of China",
+    "Brunei": "Brunei Darussalam",
+    "Bosnia and Herz.": "Bosnia and Herzegovina",
+    "Macedonia": "North Macedonia",
+    "S. Sudan": "South Sudan",
+    "Tanzania": "Tanzania, United Republic of",
+    "United States of America": "United States"
+  }
+
+  console.log("Available countries in data:", Array.from(countryLookup.keys()));
+
+  const missingCountries = new Set();
   
-  return Plot.plot({
+  const plot = Plot.plot({
     width,
     height: width * 0.6,
-    projection: "equal-earth", // Use equal-earth projection for better area representation
+    projection: {
+      type: "mercator",
+      // Clip the extreme latitudes (poles) which get heavily distorted
+      domain: {
+        type: "MultiPoint", 
+        coordinates: [[-180, -50], [180, 75]]  // Limit latitude range from -60° to 85°
+      }
+    },
     style: {
-      backgroundColor: "#f9f9f9",
+      backgroundColor: "transparent",
       color: "black",
       fontFamily: "system-ui, sans-serif"
+    },
+    color: {
+      type: "sqrt",
+      domain: [1, d3.max(data, d => d.downloads)],
+      range: ["#c6dbef", "#08519c"],
+      legend: true,  // This is the correct way to add a legend
+      tickFormat: "~s",
+      label: "Players"
     },
     marks: [
       // Draw the countries with colors based on player counts
       Plot.geo(worldGeojson.features, {
         fill: d => {
           const countryName = d.properties.name || d.properties.NAME || d.properties.ADMIN;
-          const downloads = countryLookup.get(countryName);
+          const mappedName = countryNameMapping[countryName];
+          let downloads = null;
+          if (mappedName) {
+            downloads = countryLookup.get(mappedName);
+          }
+
+          if (!downloads) {
+            downloads = countryLookup.get(countryName);
+          }
+
+          if (!downloads && countryName) {
+            missingCountries.add(countryName);
+          }
+
           return downloads ? colorScale(downloads) : "#f0f0f0"; // Gray for countries with no data
         },
         stroke: "white",
         strokeWidth: 0.5,
         title: d => {
+          // Use the same logic as the fill function to get downloads
           const countryName = d.properties.name || d.properties.NAME || d.properties.ADMIN;
-          const downloads = countryLookup.get(countryName);
+          const mappedName = countryNameMapping[countryName];
+          
+          let downloads = null;
+          if (mappedName) {
+            downloads = countryLookup.get(mappedName);
+          }
+          
+          if (!downloads) {
+            downloads = countryLookup.get(countryName);
+          }
+          
+          // Now build the tooltip with consistent data
           return downloads 
             ? `${countryName}: ${downloads.toLocaleString()} players` 
             : `${countryName}: No data`;
@@ -141,9 +219,12 @@ function worldMap(data, {width} = {}) {
       Plot.sphere({
         stroke: "#aaa",
         strokeOpacity: 0.5
-      })
+      }),
     ]
   });
+  console.log("Countries with no data:", Array.from(missingCountries));
+
+  return plot;
 }
 ```
 
