@@ -11,4 +11,4 @@ world map:
 
 platforms:
 - geen timing data van downloads: is approximatie dat alle downloads op maand van release zijn acceptabel?
-- TODO: crash on hover
+- games staan soms dubbel in de lijst (wss update?)

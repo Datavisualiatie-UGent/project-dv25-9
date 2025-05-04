@@ -160,7 +160,7 @@ function cumulativeChart(width) {
     },
     color: {
       domain: ["Steam", "PlayStation", "Xbox"],
-      range: ["#1b2838", "#006FCD", "#107C10"],
+      range: ["#0066cc", "#e0e0e0", "#107C10"],
       legend: true
     },
     marks: [
@@ -211,7 +211,7 @@ function monthlyChart(width) {
     },
     color: {
       domain: ["Steam", "PlayStation", "Xbox"],
-      range: ["#1b2838", "#006FCD", "#107C10"],
+      range: ["#0066cc", "#e0e0e0", "#107C10"],
       legend: true
     },
     marks: [
@@ -251,7 +251,64 @@ function monthlyChart(width) {
     ]
   });
 }
+
+function createGenreFilter() {
+  const filterContainer = document.createElement("div");
+  filterContainer.className = "card mb-4";
+  
+  const filterContent = document.createElement("div");
+  filterContent.className = "filter-controls p-3 d-flex align-items-center";
+  
+  // Create label
+  const label = document.createElement("label");
+  label.htmlFor = "genre-select";
+  label.textContent = "Filter by Genre: ";
+  label.className = "mb-0 me-3 fw-bold";
+  
+  // Create dropdown with popular genres only
+  const select = document.createElement("select");
+  select.id = "genre-select";
+  select.className = "form-select";
+  select.style.width = "220px";
+  //select.disabled = true;
+  
+  // Add options with just the most popular genres
+  const popularGenres = [
+    "All Genres",
+    "Action",
+    "Adventure", 
+    "First Person Shooter",
+    "RPG",
+    "Platformer",
+    "Puzzle",
+    "Racing",
+    "Simulation",
+    "Sports",
+    "Strategy"
+  ];
+  
+  popularGenres.forEach(genre => {
+    const option = document.createElement("option");
+    option.value = genre === "All Genres" ? "" : genre.toLowerCase().replace(/\s+/g, "-");
+    option.textContent = genre;
+    select.appendChild(option);
+  });
+  
+  // Add note about the non-functional state
+  const note = document.createElement("span");
+  note.className = "text-muted fst-italic small ms-3";
+  note.textContent = "(For demonstration only)";
+  
+  filterContent.appendChild(label);
+  filterContent.appendChild(select);
+  filterContent.appendChild(note);
+  filterContainer.appendChild(filterContent);
+  
+  return filterContainer;
+}
 ```
+
+${createGenreFilter()}
 
 Cumulative Game Downloads by Platform
 ${resize(cumulativeChart)}
