@@ -8,3 +8,7 @@ world map:
 - namen van landen in data kwamen niet overeen met namen van landen op de kaart (geoJSON ofzoiets?), dus vertaal map
 - antarctica van de kaart gehaald (446 spelers)
 - TODO: mss genre ipv game dropdown
+
+platforms:
+- geen timing data van downloads: is approximatie dat alle downloads op maand van release zijn acceptabel?
+- TODO: crash on hover
