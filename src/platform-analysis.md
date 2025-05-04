@@ -28,18 +28,17 @@ async function loadPlatformData() {
   
   // Process purchase data and count downloads by month, tracking top games
   function countDownloadsByMonth(purchases, gameMap, platform) {
-    // Count downloads per game
+    // Count downloads per game ID
     const gameDownloads = new Map();
     
     purchases.forEach(purchase => {
       // Parse the library JSON string to get array of game IDs
       let library;
       try {
-        // Handle the Python-style array representation
         library = JSON.parse(purchase.library.replace(/'/g, '"'));
       } catch (e) {
         console.error("Error parsing library:", e);
-        return; // Skip if parsing fails
+        return;
       }
       
       // Count each game as a download
@@ -52,16 +51,32 @@ async function loadPlatformData() {
       });
     });
     
+    // Group games by title to handle duplicates
+    const titleToDownloads = new Map();
+    const titleToReleaseDate = new Map();
+    
+    // First pass: collect all titles, their downloads, and their release dates
+    gameDownloads.forEach((downloads, gameId) => {
+      const gameInfo = gameMap.get(gameId);
+      if (!gameInfo || !gameInfo.release_date || !gameInfo.title) return;
+      
+      const title = gameInfo.title;
+      const date = new Date(gameInfo.release_date);
+      if (isNaN(date.getTime())) return;
+      
+      // Add downloads to title's total
+      if (!titleToDownloads.has(title)) {
+        titleToDownloads.set(title, 0);
+        titleToReleaseDate.set(title, date);
+      }
+      titleToDownloads.set(title, titleToDownloads.get(title) + downloads);
+    });
+    
     // Aggregate downloads by month based on release dates
     const monthlyData = {};
     
-    gameDownloads.forEach((downloads, gameId) => {
-      const gameInfo = gameMap.get(gameId);
-      if (!gameInfo || !gameInfo.release_date) return; // Skip if no release date
-      
-      const date = new Date(gameInfo.release_date);
-      if (isNaN(date.getTime())) return; // Skip if invalid date
-      
+    titleToDownloads.forEach((downloads, title) => {
+      const date = titleToReleaseDate.get(title);
       const yearMonth = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
       
       if (!monthlyData[yearMonth]) {
@@ -73,17 +88,16 @@ async function loadPlatformData() {
       
       // Add game to the month's data
       monthlyData[yearMonth].games.push({
-        title: gameInfo.title || `Game #${gameId}`,
+        title: title,
         downloads: downloads
       });
       monthlyData[yearMonth].totalDownloads += downloads;
     });
     
-    // Process each month's data to get top games and format for plotting
+    // Rest of the function remains the same
     return Object.entries(monthlyData).map(([yearMonth, data]) => {
       const [year, month] = yearMonth.split('-');
       
-      // Sort games by downloads and take top 3
       const topGames = data.games
         .sort((a, b) => b.downloads - a.downloads)
         .slice(0, 3);

@@ -12,3 +12,5 @@ world map:
 platforms:
 - geen timing data van downloads: is approximatie dat alle downloads op maand van release zijn acceptabel?
 - games staan soms dubbel in de lijst (wss update?)
+
+TODO: alles in verhaal gieten
