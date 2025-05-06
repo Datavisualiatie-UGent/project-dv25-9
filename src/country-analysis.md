@@ -1,24 +1,22 @@
 ---
 theme: dashboard
-title: Game downloads by country
+title: Gaming country analysis
 toc: false
 ---
 
-# Game downloads by country
+# Gaming country distribution analysis
 
-This visualization shows the distribution of game downloads across different countries.
-
-<!-- Load and process the country data -->
+This visualization shows the distribution of game downloads and player activity across different countries for Steam, PlayStation, and Xbox platforms.
 
 ```js
-// Load and process the country data asynchronously
-async function loadData() {
-  const vegaEmbed = await import("vega-embed").then(m => m.default);
-  const topojsonModule = await import("topojson-client");
-  const feature = topojsonModule.feature;
-  // Load player location data from both platforms - await the promises
+// Load and process the country data
+async function loadCountryData() {
+  // Load player data for each platform
   const playstationPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/players.csv").csv();
   const steamPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/players.csv").csv();
+  const xboxPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/players.csv").csv();
+  
+  // Load world map data
   const worldTopoJson = await FileAttachment("./data/countries-110m.json").json();
 
   // Convert TopoJSON to GeoJSON
@@ -28,21 +26,13 @@ async function loadData() {
     features: geoJsonObject.features
   };
   
-  // Process and count players by country
-  function countPlayersByCountry() {
+  // Process and count players by country and platform
+  function countPlayersByCountry(playerData, platformName) {
     // Create a map to store counts by country
     const countryCounts = new Map();
     
-    // Process PlayStation players
-    playstationPlayers.forEach(player => {
-      if (player.country) {
-        const country = player.country;
-        countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
-      }
-    });
-    
-    // Process Steam players
-    steamPlayers.forEach(player => {
+    // Process players
+    playerData.forEach(player => {
       if (player.country) {
         const country = player.country;
         countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
@@ -52,62 +42,44 @@ async function loadData() {
     // Convert to array format for visualization
     return Array.from(countryCounts, ([country, count]) => ({
       country,
-      downloads: count
-    })).sort((a, b) => b.downloads - a.downloads);
+      count: count,
+      platform: platformName
+    })).sort((a, b) => b.count - a.count);
   }
   
-  // Generate country download counts
-  const downloadsByCountry = countPlayersByCountry();
+  // Generate counts for each platform
+  const playstationByCountry = countPlayersByCountry(playstationPlayers, "PlayStation");
+  const steamByCountry = countPlayersByCountry(steamPlayers, "Steam");
+  const xboxByCountry = countPlayersByCountry(xboxPlayers, "Xbox");
   
-  // Create a lookup map for faster access in visualization
-  const downloadData = new Map(downloadsByCountry.map(d => [d.country, d.downloads]));
-  
-  // Calculate total downloads across all countries
-  const totalDownloads = downloadsByCountry.reduce((sum, d) => sum + d.downloads, 0);
-  
-  // Calculate total unique countries
-  const totalCountries = downloadsByCountry.length;
-  
-  return {
-    downloadsByCountry,
-    downloadData,
-    totalDownloads,
-    totalCountries,
-    worldGeojson
-  };
-}
-
-// Load the data and initialize the visualizations
-const data = await loadData();
-
-// Make the data available to the rest of the code
-const { downloadsByCountry, downloadData, totalDownloads, totalCountries, worldGeojson } = data;
-```
-
-<!-- Basic stats about the data -->
-<div class="grid grid-cols-2"> <div class="card"> <h2>Total Countries</h2> <span class="big">${totalCountries.toLocaleString("en-US")}</span> </div> <div class="card"> <h2>Total Players</h2> <span class="big">${totalDownloads.toLocaleString("en-US")}</span> </div> </div> <!-- Game platform selector - currently non-functional --> <div class="grid grid-cols-1"> <div class="card"> <h3>Select platform to analyze:</h3> <select style="width: 100%; padding: 8px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc;"> <option value="all" selected>All Platforms</option> <option value="steam">Steam</option> <option value="playstation">PlayStation</option> <option value="xbox">Xbox</option> </select> </div> </div>
-
-<!-- Choropleth map -->
-
-```js
-// Create a choropleth map using Plot instead of Vega-Lite
-function worldMap(data, {width} = {}) {
-  // Check if we have valid GeoJSON data
-  if (!worldGeojson || !worldGeojson.features) {
-    console.error("Invalid GeoJSON format:", worldGeojson);
-    return document.createElement("div");
-  }
-  
-  // Create a color scale for the choropleth
-  const colorScale = d3.scaleSqrt()
-    .domain([1, d3.max(data, d => d.downloads)])
-    .range(["#c6dbef", "#08519c"]); // Lighter blue to dark blue
+  // Generate combined country counts
+  function combineCountryData(countryDataSets) {
+    const combinedMap = new Map();
     
+    countryDataSets.forEach(dataset => {
+      dataset.forEach(({country, count}) => {
+        combinedMap.set(country, (combinedMap.get(country) || 0) + count);
+      });
+    });
+    
+    return Array.from(combinedMap, ([country, count]) => ({
+      country,
+      count: count,
+      platform: "All Platforms"
+    })).sort((a, b) => b.count - a.count);
+  }
   
-  // Create a lookup map for faster access
-  const countryLookup = new Map(data.map(d => [d.country, d.downloads]));
-
-  // Create a mapping between GeoJSON country names and your data's country names
+  const allPlatformsByCountry = combineCountryData([
+    playstationByCountry,
+    steamByCountry,
+    xboxByCountry
+  ]);
+  
+  // Calculate statistics
+  const totalCountries = new Set(allPlatformsByCountry.map(d => d.country)).size;
+  const totalPlayers = allPlatformsByCountry.reduce((sum, d) => sum + d.count, 0);
+  
+  // Country name mapping for the visualization
   const countryNameMapping = {
     "Russia": "Russian Federation",
     "W. Sahara": "Western Sahara",
@@ -137,21 +109,115 @@ function worldMap(data, {width} = {}) {
     "S. Sudan": "South Sudan",
     "Tanzania": "Tanzania, United Republic of",
     "United States of America": "United States"
-  }
-
-  console.log("Available countries in data:", Array.from(countryLookup.keys()));
-
-  const missingCountries = new Set();
+  };
   
-  const plot = Plot.plot({
+  return {
+    allPlatformsByCountry,
+    playstationByCountry,
+    steamByCountry,
+    xboxByCountry,
+    worldGeojson,
+    totalCountries,
+    totalPlayers,
+    countryNameMapping
+  };
+}
+
+// Load the data
+const countryData = await loadCountryData();
+
+// Create a stats card that displays key metrics
+function createStatsCards() {
+  const container = document.createElement("div");
+  container.className = "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4";
+  
+  const countryCard = document.createElement("div");
+  countryCard.className = "card p-4";
+  countryCard.innerHTML = `
+    <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Total Countries</h2>
+    <span style="font-size: 16px;">${countryData.totalCountries.toLocaleString("en-US")}</span>
+  `;
+  
+  const playerCard = document.createElement("div");
+  playerCard.className = "card p-4";
+  playerCard.innerHTML = `
+    <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Total Players</h2>
+    <span style="font-size: 16px;">${countryData.totalPlayers.toLocaleString("en-US")}</span>
+  `;
+  
+  container.appendChild(countryCard);
+  container.appendChild(playerCard);
+  return container;
+}
+
+// Create genre filter component (similar to genre filter in genre-analysis)
+function createGenreFilter() {
+  const filterContainer = document.createElement("div");
+  filterContainer.className = "card mb-4";
+  
+  const filterContent = document.createElement("div");
+  filterContent.className = "filter-controls p-3 d-flex align-items-center";
+  
+  // Create label
+  const label = document.createElement("label");
+  label.htmlFor = "genre-select";
+  label.textContent = "Filter by Genre: ";
+  label.className = "mb-0 me-3 fw-bold";
+  
+  // Create dropdown with genres
+  const select = document.createElement("select");
+  select.id = "genre-select";
+  select.className = "form-select";
+  select.style.width = "220px";
+  
+  // Add genre options
+  const genres = [
+    "All Genres",
+    "Action",
+    "Adventure", 
+    "First Person Shooter",
+    "RPG",
+    "Platformer",
+    "Puzzle",
+    "Racing",
+    "Simulation",
+    "Sports",
+    "Strategy"
+  ];
+  
+  genres.forEach(genre => {
+    const option = document.createElement("option");
+    option.value = genre === "All Genres" ? "" : genre.toLowerCase();
+    option.textContent = genre;
+    select.appendChild(option);
+  });
+  
+  filterContent.appendChild(label);
+  filterContent.appendChild(select);
+  filterContainer.appendChild(filterContent);
+  
+  return filterContainer;
+}
+
+// World map chart function
+function worldMapChart(width) {
+  // Create a color scale for the choropleth
+  const colorScale = d3.scaleSqrt()
+    .domain([1, d3.max(countryData.allPlatformsByCountry, d => d.count)])
+    .range(["#c6dbef", "#08519c"]); // Lighter blue to dark blue
+    
+  // Create a lookup map for faster access
+  const countryLookup = new Map(countryData.allPlatformsByCountry.map(d => [d.country, d.count]));
+
+  // Create the plot
+  return Plot.plot({
     width,
     height: width * 0.6,
     projection: {
       type: "mercator",
-      // Clip the extreme latitudes (poles) which get heavily distorted
       domain: {
         type: "MultiPoint", 
-        coordinates: [[-180, -50], [180, 75]]  // Limit latitude range from -60° to 85°
+        coordinates: [[-180, -50], [180, 75]]  // Limit latitude range from -50° to 75°
       }
     },
     style: {
@@ -161,52 +227,47 @@ function worldMap(data, {width} = {}) {
     },
     color: {
       type: "sqrt",
-      domain: [1, d3.max(data, d => d.downloads)],
+      domain: [1, d3.max(countryData.allPlatformsByCountry, d => d.count)],
       range: ["#c6dbef", "#08519c"],
-      legend: true,  // This is the correct way to add a legend
+      legend: true,
       tickFormat: "~s",
       label: "Players"
     },
     marks: [
       // Draw the countries with colors based on player counts
-      Plot.geo(worldGeojson.features, {
+      Plot.geo(countryData.worldGeojson.features, {
         fill: d => {
           const countryName = d.properties.name || d.properties.NAME || d.properties.ADMIN;
-          const mappedName = countryNameMapping[countryName];
-          let downloads = null;
+          const mappedName = countryData.countryNameMapping[countryName];
+          let count = null;
+          
           if (mappedName) {
-            downloads = countryLookup.get(mappedName);
+            count = countryLookup.get(mappedName);
           }
-
-          if (!downloads) {
-            downloads = countryLookup.get(countryName);
+          
+          if (!count) {
+            count = countryLookup.get(countryName);
           }
-
-          if (!downloads && countryName) {
-            missingCountries.add(countryName);
-          }
-
-          return downloads ? colorScale(downloads) : "#f0f0f0"; // Gray for countries with no data
+          
+          return count ? colorScale(count) : "#f0f0f0"; // Gray for countries with no data
         },
         stroke: "white",
         strokeWidth: 0.5,
         title: d => {
-          // Use the same logic as the fill function to get downloads
           const countryName = d.properties.name || d.properties.NAME || d.properties.ADMIN;
-          const mappedName = countryNameMapping[countryName];
+          const mappedName = countryData.countryNameMapping[countryName];
           
-          let downloads = null;
+          let count = null;
           if (mappedName) {
-            downloads = countryLookup.get(mappedName);
+            count = countryLookup.get(mappedName);
           }
           
-          if (!downloads) {
-            downloads = countryLookup.get(countryName);
+          if (!count) {
+            count = countryLookup.get(countryName);
           }
           
-          // Now build the tooltip with consistent data
-          return downloads 
-            ? `${countryName}: ${downloads.toLocaleString()} players` 
+          return count 
+            ? `${countryName}: ${count.toLocaleString()} players` 
             : `${countryName}: No data`;
         }
       }),
@@ -219,28 +280,19 @@ function worldMap(data, {width} = {}) {
       Plot.sphere({
         stroke: "#aaa",
         strokeOpacity: 0.5
-      }),
+      })
     ]
   });
-  console.log("Countries with no data:", Array.from(missingCountries));
-
-  return plot;
 }
-```
 
-<div class="grid grid-cols-1"> <div class="card"> <h2>Global Player Distribution</h2> ${resize((width) => worldMap(downloadsByCountry, {width}))} </div> </div>
-
-<!-- Top 10 countries by downloads -->
-
-```js
-// Create bar chart for top countries
-function countryBarChart(data, {width} = {}) {
+// Top countries bar chart function
+function countryBarChart(width) {
   // Take only top 15 countries
-  const topCountries = data.slice(0, 15);
+  const topCountries = countryData.allPlatformsByCountry.slice(0, 15);
   
   return Plot.plot({
     width,
-    height: 400,
+    height: 450,
     marginLeft: 150,
     title: "Top 15 Countries by Player Count",
     x: {
@@ -254,14 +306,32 @@ function countryBarChart(data, {width} = {}) {
     marks: [
       Plot.barX(topCountries, {
         y: "country",
-        x: "downloads",
+        x: "count",
         fill: "steelblue",
         sort: {y: "-x"}
       }),
-      Plot.ruleX([0])
+      Plot.ruleX([0]),
+      Plot.text(topCountries, {
+        x: d => d.count / 2, // Position text in middle of bars
+        y: "country",
+        text: d => d.count.toLocaleString(),
+        textAnchor: "middle", // Center text horizontally
+        fill: "white", // White text for better contrast on blue bars
+        fontWeight: "bold" // Make text stand out better
+      })
     ]
   });
 }
 ```
 
-<div class="grid grid-cols-1"> <div class="card"> ${resize((width) => countryBarChart(downloadsByCountry, {width}))} </div> </div> 
+${createStatsCards()}
+
+${createGenreFilter()}
+
+# Global player distribution
+
+${resize(worldMapChart)}
+
+# Most popular gaming countries
+
+${resize(countryBarChart)}
