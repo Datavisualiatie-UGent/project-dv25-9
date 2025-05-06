@@ -4,12 +4,9 @@
 
 ### Downloading the data
 
-> This is outdated. TODO: update this
-
-To install the data, you'll need Python, kagglehub, and you need to be authenticated in kaggle.
-
-1. Install kagglehub:
+1. Install kaggle & kagglehub:
 ```shell
+pip install kaggle
 pip install kagglehub
 ```
 
