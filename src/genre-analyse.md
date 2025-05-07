@@ -174,8 +174,8 @@ let viewSelectedMinimumAmount = view(selectedMinimumAmount)
 # Correlation matrix of genres
 
 The darkness of a square represents (in %) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
-1. Action (y-axis) & Violent (x-axis): 0.8% of Action games are also Violent.
-2. Violent (y-axis) & Action (x-axis): 71.8% of Violent games are also Action.
+1. Action (y-axis)  & Violent (x-axis) -> 0.8% of Action games are also Violent.
+2. Violent (y-axis) & Action  (x-axis) -> 71.8% of Violent games are also Action.
 
 Some observations:
 - Almost all Gore games are also marked Violent, which makes sense.
