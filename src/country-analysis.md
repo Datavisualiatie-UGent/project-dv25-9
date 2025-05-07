@@ -134,15 +134,15 @@ function createStatsCards() {
   const countryCard = document.createElement("div");
   countryCard.className = "card p-4";
   countryCard.innerHTML = `
-    <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Total Countries</h2>
-    <span style="font-size: 16px;">${countryData.totalCountries.toLocaleString("en-US")}</span>
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total Countries</h2>
+    <span style="font-size: 28px; font-weight: bold;">${countryData.totalCountries.toLocaleString("en-US")}</span>
   `;
   
   const playerCard = document.createElement("div");
   playerCard.className = "card p-4";
   playerCard.innerHTML = `
-    <h2 style="font-size: 28px; font-weight: bold; margin-bottom: 8px;">Total Players</h2>
-    <span style="font-size: 16px;">${countryData.totalPlayers.toLocaleString("en-US")}</span>
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total Players</h2>
+    <span style="font-size: 28px; font-weight: bold;">${countryData.totalPlayers.toLocaleString("en-US")}</span>
   `;
   
   container.appendChild(countryCard);
@@ -161,8 +161,8 @@ function createGenreFilter() {
   // Create label
   const label = document.createElement("label");
   label.htmlFor = "genre-select";
-  label.textContent = "Filter by Genre: ";
-  label.className = "mb-0 me-3 fw-bold";
+  label.textContent = "Filter by genre: ";
+  label.className = "mb-0 me-3 fw-bold"; //mss extra margin aan rechterkant
   
   // Create dropdown with genres
   const select = document.createElement("select");
@@ -172,7 +172,7 @@ function createGenreFilter() {
   
   // Add genre options
   const genres = [
-    "All Genres",
+    "All genres",
     "Action",
     "Adventure", 
     "First Person Shooter",
@@ -187,7 +187,7 @@ function createGenreFilter() {
   
   genres.forEach(genre => {
     const option = document.createElement("option");
-    option.value = genre === "All Genres" ? "" : genre.toLowerCase();
+    option.value = genre === "All genres" ? "" : genre.toLowerCase();
     option.textContent = genre;
     select.appendChild(option);
   });
@@ -294,7 +294,7 @@ function countryBarChart(width) {
     width,
     height: 450,
     marginLeft: 150,
-    title: "Top 15 Countries by Player Count",
+    title: "Top countries by player count",
     x: {
       label: "Players",
       grid: true

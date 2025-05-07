@@ -1,10 +1,10 @@
 ---
 theme: dashboard
-title: Gaming Platform Analysis
+title: Gaming platform analysis
 toc: false
 ---
 
-# Gaming Platform Download Trends
+# Gaming platform download trends
 
 This visualization tracks game downloads on Steam, PlayStation, and Xbox platforms over time, based on game purchases attributed to release dates.
 
@@ -276,7 +276,7 @@ function createGenreFilter() {
   // Create label
   const label = document.createElement("label");
   label.htmlFor = "genre-select";
-  label.textContent = "Filter by Genre: ";
+  label.textContent = "Filter by genre: ";
   label.className = "mb-0 me-3 fw-bold";
   
   // Create dropdown with popular genres only
@@ -288,7 +288,7 @@ function createGenreFilter() {
   
   // Add options with just the most popular genres
   const popularGenres = [
-    "All Genres",
+    "All genres",
     "Action",
     "Adventure", 
     "First Person Shooter",
@@ -303,19 +303,13 @@ function createGenreFilter() {
   
   popularGenres.forEach(genre => {
     const option = document.createElement("option");
-    option.value = genre === "All Genres" ? "" : genre.toLowerCase().replace(/\s+/g, "-");
+    option.value = genre === "All genres" ? "" : genre.toLowerCase().replace(/\s+/g, "-");
     option.textContent = genre;
     select.appendChild(option);
   });
   
-  // Add note about the non-functional state
-  const note = document.createElement("span");
-  note.className = "text-muted fst-italic small ms-3";
-  note.textContent = "(For demonstration only)";
-  
   filterContent.appendChild(label);
   filterContent.appendChild(select);
-  filterContent.appendChild(note);
   filterContainer.appendChild(filterContent);
   
   return filterContainer;
@@ -324,8 +318,10 @@ function createGenreFilter() {
 
 ${createGenreFilter()}
 
-Cumulative Game Downloads by Platform
+# Cumulative game downloads by platform
+
 ${resize(cumulativeChart)}
 
-Monthly Game Downloads by Platform (Last 10 Years)
+# Monthly game downloads by platform
+
 ${resize(monthlyChart)}
