@@ -93,56 +93,61 @@ function transformGenre(genre) {
     return genre;
 }
 
-const coOccurrence = new Map();
-const namesCounts = new Map();
-
-function addGenres(csv) {
-    csv.forEach(game => {
-        const gameGenres = parseGenres(game.genres);
-        gameGenres.forEach((G) => {
-            G = transformGenre(G);
-            // add genre G to the set
-            namesCounts.set(G, (namesCounts.get(G) || 0) + 1);
-            // for each other genre g in the list, increase the co-occurence with G
-            gameGenres.forEach(g => {
-            g = transformGenre(g);
-            if (!coOccurrence.has(G)) coOccurrence.set(G, new Map());
-            if (!coOccurrence.has(g)) coOccurrence.set(g, new Map());
-            const m1 = coOccurrence.get(G);
-            m1.set(g, (m1.get(g) || 0) + 1);
-            const m2 = coOccurrence.get(g);
-            m2.set(G, (m2.get(G) || 0) + 1);
-            });
+function buildMaps(csvs) {
+  const namesCounts = new Map();
+  const coOccurrence = new Map();
+  csvs.forEach((csv) => {
+    csv.forEach((game) => {
+      const gameGenres = parseGenres(game.genres).map(transformGenre);
+      gameGenres.forEach((G) => {
+        namesCounts.set(G, (namesCounts.get(G) || 0) + 1);
+        if (!coOccurrence.has(G)) coOccurrence.set(G, new Map());
+        gameGenres.forEach((g) => {
+          if (!coOccurrence.has(g)) coOccurrence.set(g, new Map());
+          coOccurrence.get(G).set(g, (coOccurrence.get(G).get(g) || 0) + 1);
+          coOccurrence.get(g).set(G, (coOccurrence.get(g).get(G) || 0) + 1);
         });
+      });
     });
+  });
+  return { namesCounts, coOccurrence };
 }
-addGenres(gamesCSVPlaystation);
-addGenres(gamesCSVSteam);
-addGenres(gamesCSVXbox);
 
-const names = Array.from(namesCounts)
-    .filter(([_, count]) => count > 300)
-    .map(([name, _]) => name)
+const mapsByPlatform = {
+  Playstation: buildMaps([gamesCSVPlaystation]),
+  Steam:       buildMaps([gamesCSVSteam]),
+  XBox:        buildMaps([gamesCSVXbox]),
+  All:         buildMaps([gamesCSVPlaystation, gamesCSVSteam, gamesCSVXbox])
+};
+
+function genreNamesAbove(min, platform) {
+  const nc = mapsByPlatform[platform].namesCounts;
+  return Array.from(nc.entries())
+    .filter(([, count]) => count > min)
+    .map(([name]) => name)
     .sort();
-const N = names.length;
+}
 
-const matrix = Array.from({ length: N }, () => Array(N).fill(0));
-for (let i = 0; i < N; i++) {
+function buildMatrix(names, namesCounts, coOccurrence) {
+  const N = names.length;
+  const M = Array.from({ length: N }, () => Array(N).fill(0));
+  for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
-        matrix[i][j] = coOccurrence.get(names[i]).get(names[j]) || 0
-        matrix[i][j] = matrix[i][j] / namesCounts.get(names[i]) 
-        matrix[i][j] = matrix[i][j] / 2
-        matrix[i][j] = matrix[i][j] * 100
+      let v = coOccurrence.get(names[i]).get(names[j]) || 0;
+      v = (v / namesCounts.get(names[i]) / 2) * 100;
+      M[i][j] = Math.min(v, 100);
     }
+  }
+  return M;
 }
 
 ```
 
 ```js
-const selectedNames = Inputs.checkbox(names, {
-    label: "Select genres to include",
+const selectedNames = Inputs.select(genreNamesAbove(viewSelectedMinimumAmount, viewSelectedPlatform), {
+    label: "Included genres:",
     multiple: true,
-    value: names
+    value: genreNamesAbove(viewSelectedMinimumAmount, viewSelectedPlatform)
 });
 let viewSelectedNames = view(selectedNames)
 ```
@@ -150,32 +155,63 @@ let viewSelectedNames = view(selectedNames)
 ```js
 const selectedPlatform = Inputs.radio(
     ["Playstation", "Steam", "XBox", "All"], {
-    label: "Select genres to include",
+    label: "Platform:",
     multiple: false,
-    value: "Playstation"
+    value: "Steam"
 });
 let viewSelectedPlatform = view(selectedPlatform)
 ```
 
 ```js
-const selectedMinimumAmount = Inputs.range([0, 1000], {step: 1, value: 300})
+const selectedMinimumAmount = Inputs.range([0, 1000], {
+    step: 1, 
+    value: 100,
+    label: "Minimum # games per genre:"
+});
 let viewSelectedMinimumAmount = view(selectedMinimumAmount)
 ```
 
+# Correlation matrix of genres
+
+The darkness of a sqaure represents (in percentage) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
+1. Action (y-axis) & Violent (x-axis): 0.8% of Action games are also Violent.
+2. Violent (y-axis) & Action (x-axis): 71.8% of Violent games are also Action.
+
+Some observations:
+- Almost all Gore games are also marked Violent, which makes sense.
+- About 75% of all games are Indie. An outlier is Massivly Multiplayer games. This is probably because they are harder to develop and require more funding and programming.
+- Some of the games are not actual games, but rather utility applications.
+
 <div class="grid">
   <div class="card">
-    <h2>Correlation matrix of genres.</h2>
     ${selectedPlatform}
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
     ${selectedMinimumAmount}
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
     ${selectedNames}
+  </div>
+</div>
+
+<div class="grid">
+  <div class="">
     ${resize((width) => {
+      const { namesCounts, coOccurrence } = mapsByPlatform[viewSelectedPlatform];
+      const names = genreNamesAbove(viewSelectedMinimumAmount, viewSelectedPlatform);
+      const matrix = buildMatrix(names, namesCounts, coOccurrence);
       const idx = viewSelectedNames
-        .map(n => names.indexOf(n))
-        .filter(i => i >= 0);
-      const filteredMatrix = idx.map(i =>
-        idx.map(j => matrix[i][j])
-      );
-      return heatmap(filteredMatrix, viewSelectedNames, { width });
+        .map((n) => names.indexOf(n))
+        .filter((i) => i >= 0);
+      const sub = idx.map((i) => idx.map((j) => matrix[i][j]));
+      const sel = viewSelectedNames;
+      return heatmap(sub, sel, { width });
     })}
   </div>
 </div>
