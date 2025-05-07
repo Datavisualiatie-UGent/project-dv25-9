@@ -8,6 +8,7 @@ export default {
   // lets you organize them into sections and have unlisted pages.
   pages: [
     {name: "Introduction", path: "/introduction"},
+    {name: "Genres", path: "/genre-analyse"},
     {name: "Countries", path: "/country-analysis"},
     {name: "Platforms", path: "/platform-analysis"},
     {name: "Reviews",   path: "/review-analysis"},
