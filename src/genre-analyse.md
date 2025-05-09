@@ -1,3 +1,5 @@
+
+<!-- All the data & functions related to interpreting genres. -->
 ```js
 const gamesCSVPlaystation     = await FileAttachment(
     "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/games.csv"
@@ -8,109 +10,109 @@ const gamesCSVSteam           = await FileAttachment(
 const gamesCSVXbox            = await FileAttachment(
     "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.csv"
 ).csv();
-function parseGenres(raw) {
+
+function parseRawGenreList(raw) {
   try {
     return JSON.parse(raw.replace(/'/g, '"'));
   } catch {
     return [];
   }
 }
-```
 
-```js 
-//===================================================================================================================================================
-//===================================================================================================================================================
-```
-
-```js
-function heatmap(matrix, names, { width } = {}) {
-  const cells = names.flatMap((nameX, i) =>
-    names.map((nameY, j) => {
-      let value = matrix[i][j];
-      if (value > 100) {value = 100;}
-      return { x: nameX, y: nameY, value, fill: value };
-    })
-  );
-  return Plot.plot({
-    width,
-    height: 500,
-    marginBottom: 90,
-    marginLeft: 110,
-    x: {
-      label: "",
-      domain: names,
-      tickSize: 0,
-      tickRotate: -45
-    },
-    y: {
-      label: "",
-      domain: names,
-      tickSize: 0,
-      tickRotate: 0
-    },
-    color: {
-      legend: true,
-      type: "sequential",
-      scheme: "blues",
-      domain: [0, d3.max(cells, d => d.value)],
-      label: "Overlap between genres (%)"
-    },
-    marks: [
-      Plot.rect(cells, {
-        x: "y",
-        y: "x",
-        fill: "fill",
-        title: d => `${d.x} games that are also ${d.y}: ${d.value.toFixed(1)}%`,
-        stroke: "gray",
-      })
+const lowercaseLetters = Array.from('abcdefghijklmnopqrstuvwxyz');
+const uppercaseLetters = Array.from('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+const specialCharacters = Array.from(' &/-+');
+const allowedChars = [...lowercaseLetters, ...uppercaseLetters, ...specialCharacters];
+const specialRenamings = [
+      [["Party!"], "Party"],
+      [["Education", "Educational"], "Educational & Trivia"],
+      [["Music/Rhythm", "Music+"], "Music & Rhythm"],
+      [["Action Horror", "Action-Adventure", "Action-RPG"], "Action"],
+      [["Survival Horror"], "Survival"],
+      [["Video Production"], "Video"],
+      [["Fps"], "First Person Shooter"],
+      [["Multi-Player Online Battle Arena"], "Mmo Battle"],
+      [["FPS"], "First Person Shooter"],
     ]
-  });
-}
-```
 
-```js
-function transformGenre(genre) {
-    const allowedChars = [
-    ...'abcdefghijklmnopqrstuvwxyz',
-    ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-    ...' &/-+',
-    ];
-    genre = Array.from(genre)
-        .filter(char => allowedChars.includes(char))
-        .join('');
+function postProcessGenreName(genre) {
+    // Only allow certain characters.
+    genre = Array.from(genre).filter(char => allowedChars.includes(char)).join('');
+
+    // Capitalize words
+    let sentence = [];
+    let previousSpecial = true;
+    for (let char of Array.from(genre)) {
+      if (specialCharacters.includes(char)) {
+        previousSpecial = true;
+        sentence.push(char);
+        continue;
+      }
+      if (previousSpecial) {
+        previousSpecial = false;
+        sentence.push(char.toUpperCase());
+        continue;
+      }
+      sentence.push(char.toLowerCase());
+      
+    }
+    genre = sentence.join('');
+
+    // Trim whitespace before and after.
     genre = genre.trim();
-    genre = genre.charAt(0).toUpperCase() + genre.slice(1);
-    if (["Party!"].includes(genre)) return "Party";
-    if (["Education", "Educational"].includes(genre)) return "Educational & Trivia";
-    if (["MUSIC/RHYTHM", "Music+"].includes(genre)) return "Music & Rhythm";
-    if (["Action Horror", "Action-Adventure", "Action-RPG"].includes(genre)) return "Action";
-    if (["Survival Horror"].includes(genre)) return "Survival";
-    if (["Video Production"].includes(genre)) return "Video";
-    if (["FPS"].includes(genre)) return "First Person Shooter";
-    if (["Multi-player Online Battle Arena"].includes(genre)) return "MMO Battle";
-    if (["FPS"].includes(genre)) return "First Person Shooter";
-    //if (genre.length < 20) return "X";
+
+    // Some special renamings. 
+    for (const [list, rename] of specialRenamings) {
+      if (list.includes(genre)) return rename;
+    }
+
+    // Finally return the new genre.
     return genre;
 }
+```
 
-function buildMaps(csvs) {
-  const namesCounts = new Map();
-  const coOccurrence = new Map();
-  csvs.forEach((csv) => {
-    csv.forEach((game) => {
-      const gameGenres = parseGenres(game.genres).map(transformGenre);
-      gameGenres.forEach((G) => {
-        namesCounts.set(G, (namesCounts.get(G) || 0) + 1);
-        if (!coOccurrence.has(G)) coOccurrence.set(G, new Map());
-        gameGenres.forEach((g) => {
-          if (!coOccurrence.has(g)) coOccurrence.set(g, new Map());
-          coOccurrence.get(G).set(g, (coOccurrence.get(G).get(g) || 0) + 1);
-          coOccurrence.get(g).set(G, (coOccurrence.get(g).get(G) || 0) + 1);
+<!-- Data transform functions -->
+```js
+function buildMaps(platformCSVs) {
+  const genreGameCountsMap = new Map();   // For each genre how many games there are.
+  const genreCoOccurrenceMap = new Map(); // For each genre G1 a map of genres G2. The amount of G1 games that are also G2 games.  
+  const genreYearCountMap = new Map();    //
+  const yearGamesMap = new Map()
+
+  platformCSVs.forEach((platformCSV) => {
+    platformCSV.forEach((game) => {
+      const releaseDate = game.release_date;
+      const releaseYear = new Date(releaseDate).getFullYear();
+
+      const gameGenres = parseRawGenreList(game.genres).map(postProcessGenreName);
+      gameGenres.forEach((G1) => {
+
+        // build yearGamesMap (technically not really correct; but count for each genre the game has)
+        yearGamesMap.set(releaseYear, (yearGamesMap.get(releaseYear) || 0) + 1);
+
+        // build genreGameCountsMap
+        genreGameCountsMap.set(G1, (genreGameCountsMap.get(G1) || 0) + 1);
+
+        // build genreCoOccurrenceMap
+        if (!genreCoOccurrenceMap.has(G1)) genreCoOccurrenceMap.set(G1, new Map());
+        gameGenres.forEach((G2) => {
+          if (!genreCoOccurrenceMap.has(G2)) genreCoOccurrenceMap.set(G2, new Map());
+
+          genreCoOccurrenceMap.get(G1).set(G2, (genreCoOccurrenceMap.get(G1).get(G2) || 0) + 1);
+          genreCoOccurrenceMap.get(G2).set(G1, (genreCoOccurrenceMap.get(G2).get(G1) || 0) + 1);
+        
         });
+
+        // build genreYearCountMap
+        if (!genreYearCountMap.has(G1)) genreYearCountMap.set(G1, new Map());
+        genreYearCountMap.get(G1).set(releaseYear, (genreYearCountMap.get(G1).get(releaseYear) || 0) + 1);
+
       });
     });
   });
-  return { namesCounts, coOccurrence };
+
+  // for later processing in case of Correlation Matrix, see buildMatrix
+  return [ genreGameCountsMap, genreCoOccurrenceMap, genreYearCountMap, yearGamesMap ];
 }
 
 const mapsByPlatform = {
@@ -120,199 +122,366 @@ const mapsByPlatform = {
   All:         buildMaps([gamesCSVPlaystation, gamesCSVSteam, gamesCSVXbox])
 };
 
-function genreNamesAbove(min, platform) {
-  const nc = mapsByPlatform[platform].namesCounts;
-  return Array.from(nc.entries())
-    .filter(([, count]) => count > min)
-    .map(([name]) => name)
+function genresAboveMinGamesAmount(min, platform) {
+  const [genreGameCountsMap, , , ] = mapsByPlatform[platform];
+  return Array.from(genreGameCountsMap.entries())
+    .filter(([, count]) => count >= min)
+    .map(([genre, ]) => genre)
     .sort();
 }
+```
 
-function buildMatrix(names, namesCounts, coOccurrence) {
-  const N = names.length;
-  const M = Array.from({ length: N }, () => Array(N).fill(0));
+<!-- ============================================================================================================== -->
+<!-- ============================================================================================================== -->
+
+<!-- Correlation Matrix data postprocessing -->
+```js
+function buildMatrix(genres, genreGameCountsMap, genreCoOccurrenceMap) {
+  // initialize matrix
+  const N = genres.length;
+  const matrix = Array.from({ length: N }, () => Array(N).fill(0));
+
+  // fill matrix
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
-      let v = coOccurrence.get(names[i]).get(names[j]) || 0;
-      v = (v / namesCounts.get(names[i]) / 2) * 100;
-      M[i][j] = Math.min(v, 100);
+      let element = genreCoOccurrenceMap.get(genres[i]).get(genres[j]) || 0;  // set the basic element value
+      element = element / 2;                                                  // divide by 2 to because we counted every game double (G1 -> G2 & G2 -> G1)
+      element = element / genreGameCountsMap.get(genres[i]);                  // normalize between [0, 1] by dividing with the total game count for that genre
+      element = element * 100;                                                // transform to percentages
+      matrix[i][j] = element;
     }
   }
-  return M;
+
+  return matrix;
 }
-
 ```
 
+<!-- Correlation Matrix plot -->
 ```js
-const selectedNames = Inputs.select(genreNamesAbove(viewSelectedMinimumAmount, viewSelectedPlatform), {
-    label: "Included genres:",
-    multiple: true,
-    value: genreNamesAbove(viewSelectedMinimumAmount, viewSelectedPlatform)
-});
-let viewSelectedNames = view(selectedNames)
+function heatmap(matrix, genres, { width } = {}) {
+
+  // define the cells to be use in the heatmap as a list
+  const cells = [];
+  for (let i = 0; i < genres.length; i++) {
+    for (let j = 0; j < genres.length; j++) {
+      let value = matrix[i][j]; // can't use matrix[i][j] directly, or will break
+      cells.push({
+        x: genres[i],
+        y: genres[j],
+        value,
+        fill: value
+      });
+    }
+  }
+
+  // the actual heatmap with cells as markpoints
+  return Plot.plot({
+    width,
+    height: 500,
+    marginBottom: 90, // manually determined so that genre names don't go out of bounds
+    marginLeft: 110,  // manually determined so that genre names don't go out of bounds
+    x: {
+      domain: genres,
+      tickSize: 0,
+      tickRotate: -45
+    },
+    y: {
+      domain: genres,
+      tickSize: 0,
+    },
+    color: {
+      legend: true,
+      type: "sequential",
+      scheme: "blues",
+      domain: [0, d3.max(cells, c => c.value)],
+      label: "Overlap between genres (%)"
+    },
+    marks: [
+      Plot.rect(cells, {
+        x: "y",         // cell property "x"
+        y: "x",         // cell property "y"
+        fill: "fill",   // cell property "fill"
+        stroke: "gray",
+        title: c => `${c.x} games that are also ${c.y}: ${c.value.toFixed(1)}%`,
+      })
+    ]
+  });
+}
 ```
 
+<!-- Correlation Matrix adaptive selectors -->
 ```js
 const selectedPlatform = Inputs.radio(
-    ["Playstation", "Steam", "XBox", "All"], {
+  Object.keys(mapsByPlatform), {
     label: "Platform:",
     multiple: false,
-    value: "Steam"
-});
-let viewSelectedPlatform = view(selectedPlatform)
+    value: "Steam", // default
+  });
+let viewSelectedPlatform = view(selectedPlatform);
 ```
 
 ```js
-const selectedMinimumAmount = Inputs.range([0, 1000], {
+const selectedMinGamesAmount = Inputs.range(
+  [0, 1000], {
+    label: "Minimum # games per genre:",
     step: 1, 
-    value: 100,
-    label: "Minimum # games per genre:"
-});
-let viewSelectedMinimumAmount = view(selectedMinimumAmount)
+    value: 100, // default
+  });
+let viewSelectedMinGamesAmount = view(selectedMinGamesAmount);
 ```
 
+```js
+const selectedGenres = Inputs.select(genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), {
+    label: "Included genres:",
+    multiple: true,
+    value: genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), // default
+});
+let viewSelectedGenres = view(selectedGenres);
+```
+
+<!-- Stat card -->
+```js
+function statCard(selectedPlatform, selectedMinGamesAmount) {
+  /* ALSO USED BY LINE CHART */
+  const [genreGameCountsMap, , , yearGamesMap] = mapsByPlatform[selectedPlatform];
+
+  // Total games
+  const totalGames = Array.from(yearGamesMap.values()).reduce((total, count) => total + count, 0);
+
+  // Selected games
+  let selectedGamesCount = 0;
+  genresAboveMinGamesAmount(selectedMinGamesAmount, selectedPlatform).forEach((genre) => {
+    selectedGamesCount += genreGameCountsMap.get(genre) || 0;
+  });
+
+  // Calculate percentage
+  const percentage = (selectedGamesCount / totalGames) * 100;
+
+  const name = "Percentage games included:";
+  const number = percentage.toFixed(2)
+
+  const container = document.createElement("div");
+  container.className = "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4";
+  
+  const card = document.createElement("div");
+  card.className = "card p-4";
+  card.innerHTML = `
+    <h2 style="font-size: 16px; margin-bottom: 8px;">${name}</h2>
+    <span style="font-size: 28px; font-weight: bold;">${number.toLocaleString("en-US")}%</span>
+  `;
+  
+  container.appendChild(card);
+  return container;
+}
+```
+
+<!-- Correlation Matrix adaptive plot -->
+```js
+function displayHeatmap(width) {
+  const [ genreGameCountsMap, genreCoOccurrenceMap, , ] = mapsByPlatform[viewSelectedPlatform];
+  const matrix = buildMatrix(viewSelectedGenres, genreGameCountsMap, genreCoOccurrenceMap);
+  return heatmap(matrix, viewSelectedGenres, { width });
+}
+```
+
+<!-- Correlation Matrix display -->
 # Correlation matrix of genres
 
+### Settings:
+<div class="card">
+  ${selectedPlatform}
+  ${selectedMinGamesAmount}
+  ${statCard(viewSelectedPlatform, viewSelectedMinGamesAmount)}
+  ${selectedGenres}
+</div>
+
+### Chart:
+<div class="card">
+  ${resize((width) => displayHeatmap(width))}
+</div>
+
+### Explanation:
 The darkness of a square represents (in %) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
 1. Action (y-axis)  & Violent (x-axis) -> 0.8% of Action games are also Violent.
 2. Violent (y-axis) & Action  (x-axis) -> 71.8% of Violent games are also Action.
 
 Some observations:
 - Almost all Gore games are also marked Violent, which makes sense.
-- About 75% of all games are Indie. An outlier is Massivly Multiplayer games. This is probably because they are harder to develop and require more funding and programming.
+- About 75% of all games are Indie. An outlier is Massively Multiplayer games. This is probably because they are harder to develop and require more funding and programming.
 - Some of the games are not actual games, but rather utility applications.
 
-<div class="grid">
-  <div class="card">
-    ${selectedPlatform}
-  </div>
-</div>
+<!-- ============================================================================================================== -->
+<br></br>
+<!-- ============================================================================================================== -->
 
-<div class="grid">
-  <div class="card">
-    ${selectedMinimumAmount}
-  </div>
-</div>
-
-<div class="grid">
-  <div class="card">
-    ${selectedNames}
-  </div>
-</div>
-
-<div class="grid">
-  <div class="">
-    ${resize((width) => {
-      const { namesCounts, coOccurrence } = mapsByPlatform[viewSelectedPlatform];
-      const names = genreNamesAbove(viewSelectedMinimumAmount, viewSelectedPlatform);
-      const matrix = buildMatrix(names, namesCounts, coOccurrence);
-      const idx = viewSelectedNames
-        .map((n) => names.indexOf(n))
-        .filter((i) => i >= 0);
-      const sub = idx.map((i) => idx.map((j) => matrix[i][j]));
-      const sel = viewSelectedNames;
-      return heatmap(sub, sel, { width });
-    })}
-  </div>
-</div>
-
-```js   
-//===================================================================================================================================================
-//===================================================================================================================================================
-```
-
+<!-- Line Chart plot -->
 ```js
-/*
-const genreData = [];
-const yearTotals = { 2023: 0, 2024: 0 };
-for (const game of gamesCSV) {
-  const year = new Date(game.release_date).getFullYear();
-  if (year !== 2023 && year !== 2024) continue;
-  yearTotals[year]++;
-  const gameGenres = parseGenres(game.gameGenres);
-  for (const genre of gameGenres) {
-    genreData.push({ genre, year });
+import iwanthue from "iwanthue";
+
+function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { width } = {}) {
+
+  console.log(yearGamesMap)
+
+  // do not use 2025 as it is not complete
+  if (years[years.length-1] == 2025) {
+    years = years.slice(0, -1); 
   }
-}
-const counts = d3.rollups(
-  genreData,
-  v => v.length,
-  d => d.genre,
-  d => d.year
-);
-const allData = counts.map(([genre, yearMap]) => {
-  const y2023 = yearMap.find(([y]) => y === 2023)?.[1] || 0;
-  const y2024 = yearMap.find(([y]) => y === 2024)?.[1] || 0;
-  const year1 = (y2023 / yearTotals[2023] * 100).toFixed(1);
-  const year2 = (y2024 / yearTotals[2024] * 100).toFixed(1);
-  return {
-    name: genre,
-    year1: +year1,
-    year2: +year2,
-    change: +(year2 - year1).toFixed(1)
-  };
-});
-const sortedByChange = allData.sort((a, b) => b.change - a.change);
-const topIncrease = sortedByChange.slice(0, 3);
-const topDecrease = sortedByChange.slice(-3);
-const slopeData = [...topIncrease, ...topDecrease];
-*/
-```
 
-```js
-/*
-function slopeGraph(data, { width } = {}) {
-  const tidy = data.flatMap(d => [
-    { name: d.name, year: "Year 1", value: d.year1 },
-    { name: d.name, year: "Year 2", value: d.year2 }
-  ]);
+  const allGenres = Array.from(genreYearCountMap.keys()).sort();
+  const colorScale = d3.scaleOrdinal(allGenres, iwanthue(allGenres.length))
+
+  const points = [];
+  genres.forEach((genre) => {
+    years.forEach((year) => {
+      let count = genreYearCountMap.get(genre).get(year) || 0;
+
+      // only show if there are at least 20 games, otherwise too discontinuous
+      if (count > 20) {
+
+        if (relative) {
+          count = count / yearGamesMap.get(year);
+        }
+
+        points.push({
+          genre: genre,
+          year: year,
+          count: count
+        })
+
+      }
+    })
+  })
+
   return Plot.plot({
     width,
     height: 500,
-    x: {
-      label: null,
-      domain: ["Year 1", "Year 2"],
-      tickSize: 0
-    },
-    y: {
-      grid: true,
-      label: "Value"
+    color: {
+      type: "categorical",
+      domain: genres,
+      range: genres.map(g => colorScale(g)),
+      legend: true
     },
     marks: [
-      Plot.line(tidy, {
+      // The main lines
+      Plot.line(points, {
         x: "year",
-        y: "value",
-        z: "name",
-        stroke: "name",
-        strokeOpacity: 0.7
+        y: "count",
+        z: "genre",
+        stroke: "genre",
       }),
-      Plot.text(tidy.filter(d => d.year === "Year 1"), {
+
+      // tooltip
+      Plot.line(points, {
         x: "year",
-        y: "value",
-        text: d => `${d.name} (${d.value})`,
-        textAnchor: "end",
-        dx: -6
+        y: "count",
+        z: "genre",
+        title: "genre",
+        strokeWidth: 15,
+        strokeOpacity: 0,
+        hover: {
+          strokeOpacity: 0.2
+        }
       }),
-      Plot.text(tidy.filter(d => d.year === "Year 2"), {
+      Plot.dot(points, {
         x: "year",
-        y: "value",
-        text: d => `${d.name} (${d.value})`,
-        textAnchor: "start",
-        dx: 6
+        y: "count",
+        z: "genre",
+        title: "genre",
+        strokeOpacity: 0,
+        strokeWidth: 20
+      }),
+
+      // Crosshair lines (axis-aligned rules + labels)
+      Plot.crosshair(points, {
+        x: "year",
+        y: "count",
+        z: 100,
       })
     ]
   });
 }
-*/
+```
+
+<!-- Line Chart adaptive selectors -->
+```js
+const selectedPlatform2 = Inputs.radio(
+  Object.keys(mapsByPlatform), {
+    label: "Platform:",
+    multiple: false,
+    value: "Steam", // default
+  });
+let viewSelectedPlatform2 = view(selectedPlatform2);
 ```
 
 ```js
-/*
-<div class="grid">
-  <div class="card">
-    <h2>Most change in download per genre (2023-2024).</h2>
-    ${resize((width) => slopeGraph(slopeData, { width }))}
-  </div>
-</div>
-*/
+const selectedMinGamesAmount2 = Inputs.range(
+  [100, 1000], {
+    label: "Minimum # games per genre:",
+    step: 1, 
+    value: 200, // default
+  });
+let viewSelectedMinGamesAmount2 = view(selectedMinGamesAmount2);
 ```
+
+```js
+const selectedGenres2 = Inputs.select(genresAboveMinGamesAmount(viewSelectedMinGamesAmount2, viewSelectedPlatform2), {
+    label: "Included genres:",
+    multiple: true,
+    value: ["Action", "Strategy", "Indie", "Free To Play"]
+});
+let viewSelectedGenres2 = view(selectedGenres2);
+```
+
+```js
+const selectedRelative2 = Inputs.radio(["relative", "absolute"], {
+    value: "relative", // default
+});
+let viewSelectedRelative2 = view(selectedRelative2);
+```
+
+<!-- Line Chart adaptive plot -->
+```js
+function displayLinechart(width) {
+  const [ , , genreYearCountMap, yearGamesMap ] = mapsByPlatform[viewSelectedPlatform2];
+  
+  let allYears = new Set();
+  for (const subMap of genreYearCountMap.values()) {
+    for (const year of subMap.keys()) {
+      allYears.add(year);
+    }
+  }
+  allYears = Array.from(allYears).sort();
+
+  const relative = viewSelectedRelative2 == "relative";
+
+  return lineChart(genreYearCountMap, yearGamesMap, viewSelectedGenres2, allYears, relative, { width });
+}
+```
+
+<!-- Line Chart display -->
+# Release trend of genres
+
+### Settings:
+<div class="card">
+  ${selectedPlatform2}
+  ${selectedMinGamesAmount2}
+  ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
+  ${selectedGenres2}
+</div>
+
+<div class="card">
+  <p>Selecting relative will normalize the game count to the total # games for that year.</p>
+  ${selectedRelative2}
+</div>
+
+### Chart:
+<div class="card">
+  ${resize((width) => displayLinechart(width))}
+</div>
+
+### Explanation:
+Action and Strategy games were more popular in the early 2000's, compared to now.
+This could be explained because as the amount of games increase, more specific sub-genres are being used.
+The term Indie was not really in use at that time, but became mainstream quickly after.
+It is difficult to predict which genres will become more popular in the future; most stay constant.
+One genre that is seeing a slow but steady increase, however, is Free To Play games.

@@ -17,6 +17,7 @@
     "d3-dsv": "^3.0.1",
     "d3-fetch": "^3.0.1",
     "d3-time-format": "^4.1.0",
+    "iwanthue": "^2.0.0",
     "topojson-client": "^3.1.0",
     "vega": "^6.1.2",
     "vega-embed": "^7.0.2",
