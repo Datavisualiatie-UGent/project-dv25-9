@@ -355,6 +355,12 @@ function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { w
   return Plot.plot({
     width,
     height: 500,
+    x: {
+      grid: true
+    },
+    y: {
+      grid: true
+    },
     color: {
       type: "categorical",
       domain: genres,
