@@ -4,7 +4,7 @@ title: Gaming country analysis
 toc: true
 ---
 
-# Gaming country distribution analysis
+# Where are gamers?
 
 ```js
 // Load and process the country data

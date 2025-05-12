@@ -4,7 +4,7 @@ title: Gaming platform analysis
 toc: true
 ---
 
-# Gaming platform trends
+# What do gamers play on?
 
 ```js
 // Load and process the platform data
