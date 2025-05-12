@@ -1,12 +1,10 @@
 ---
 theme: dashboard
 title: Steam review analysis
-toc: false
+toc: true
 ---
 
 # Steam review analysis
-
-This visualization analyzes the frequency of word compounds (adjective + noun) in Steam game reviews to reveal common player sentiments.
 
 ```js
 // Import libraries
@@ -172,56 +170,6 @@ async function loadReviewData() {
 const reviewData = await loadReviewData();
 const { reviews, totalWords, wordCounts } = reviewData;
 
-// Create game selector component
-function createGameSelector() {
-  const filterContainer = document.createElement("div");
-  filterContainer.className = "card mb-4";
-  
-  const filterContent = document.createElement("div");
-  filterContent.className = "filter-controls p-3 d-flex align-items-center";
-  
-  // Create label
-  const label = document.createElement("label");
-  label.htmlFor = "game-select";
-  label.textContent = "Filter by genre: ";
-  label.className = "mb-0 me-3 fw-bold";
-  
-  //TODO: hernoem naar popularGenres ipv popularGames
-  // Create dropdown with popular games
-  const select = document.createElement("select");
-  select.id = "game-select";
-  select.className = "form-select";
-  select.style.width = "220px";
-  
-  // Add game options
-  const popularGames = [
-    "All genres",
-    "Action",
-    "Adventure", 
-    "First Person Shooter",
-    "RPG",
-    "Platformer",
-    "Puzzle",
-    "Racing",
-    "Simulation",
-    "Sports",
-    "Strategy"
-  ];
-
-  popularGames.forEach(game => {
-    const option = document.createElement("option");
-    option.value = game === "All genres" ? "" : game.toLowerCase().replace(/\s+/g, "-");
-    option.textContent = game;
-    select.appendChild(option);
-  });
-  
-  filterContent.appendChild(label);
-  filterContent.appendChild(select);
-  filterContainer.appendChild(filterContent);
-  
-  return filterContainer;
-}
-
 // Create stats cards
 function createStatsCards() {
   const container = document.createElement("div");
@@ -230,14 +178,14 @@ function createStatsCards() {
   const reviewsCard = document.createElement("div");
   reviewsCard.className = "card p-4";
   reviewsCard.innerHTML = `
-    <h2 style="font-size: 16px; margin-bottom: 8px;">Total Reviews</h2>
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total reviews</h2>
     <span style="font-size: 28px; font-weight: bold;">${reviews.length.toLocaleString("en-US")}</span>
   `;
   
   const wordsCard = document.createElement("div");
   wordsCard.className = "card p-4";
   wordsCard.innerHTML = `
-    <h2 style="font-size: 16px; margin-bottom: 8px;">Total Words</h2>
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total words</h2>
     <span style="font-size: 28px; font-weight: bold;">${totalWords.toLocaleString("en-US")}</span>
   `;
   
@@ -254,7 +202,7 @@ function wordCloudChart(width) {
   // Format the data for the word cloud - using proper log scaling for better sizing
   const words = wordCounts.slice(0, 40).map(d => ({
     text: d.word,
-    size: Math.sqrt(d.count) * 0.9, // Better logarithmic scaling
+    size: Math.sqrt(d.count) * 0.7, // Better logarithmic scaling
     count: d.count
   }));
   
@@ -313,7 +261,7 @@ function wordCloudChart(width) {
 // Word frequency bar chart
 function wordFrequencyChart(width) {
   return Plot.plot({
-    title: "Most Frequent Word Compounds in Steam Game Reviews",
+    title: "",
     width,
     height: 500,
     marginLeft: 120,
@@ -342,12 +290,16 @@ function wordFrequencyChart(width) {
 
 ${createStatsCards()}
 
-${createGameSelector()}
+This section analyzes over 1.2 million game reviews, totaling around 60 million words. To keep the visualizations clear and consistent, only English-language reviews are included in the analysis. While this narrows the scope, it ensures more meaningful interpretation of sentiment and phrasing.
 
 # Word cloud visualization
 
 ${resize(wordCloudChart)}
 
+The word cloud highlights the most common phrases in the reviews, using an adjective + noun format. This approach provides more context than individual words, giving a clearer picture of what players are saying. Larger words appear more frequently in the data. Notably, the most common phrases are overwhelmingly positive—terms like “good game,” “fun game” and “amazing game” dominate the cloud. This suggests that overall sentiment in the dataset leans strongly positive.
+
 # Word frequency analysis
 
 ${resize(wordFrequencyChart)}
+
+The final graph presents the same phrases as the word cloud, now in a bar chart with exact counts. “Good game” stands out as by far the most frequent phrase, which aligns with expectations for game reviews. Other popular phrases reinforce the earlier observation that positive sentiment is much more common than negative.

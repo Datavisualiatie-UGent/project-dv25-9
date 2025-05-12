@@ -2,15 +2,13 @@ reviews:
 - eerst word cloud
 - daarna filter, omdat "the", "or" enzo bovenaan stonden
 - daarna filter met adjectief + substantief om nuttige combinaties zoals "nice graphics", "great gameplay" te vinden
-- TODO: mss genre ipv game dropdown
 
 world map:
 - namen van landen in data kwamen niet overeen met namen van landen op de kaart (geoJSON ofzoiets?), dus vertaal map
 - antarctica van de kaart gehaald (446 spelers)
-- TODO: mss genre ipv game dropdown
+- Kosovo (en een paar andere landen) heeft geen data, aangezien Kosovo niet erkend wordt door alle landen
 
 platforms:
-- geen timing data van downloads: is approximatie dat alle downloads op maand van release zijn acceptabel?
-- games staan soms dubbel in de lijst (wss update?)
-
-TODO: alles in verhaal gieten
+- Geen data over recente releases, dus lijn gaat naar beneden
+- Dataset was niet erg betrouwbaar, data voor 2020 week erg af van de echte data, en nog steeds is dit een onderschatting van de echte data
+- Downloads voordat Steam bestond: Valve games die gemaakt zijn voordat steam bestond, en dan retroactief op steam gezet zijn, met originele release datum

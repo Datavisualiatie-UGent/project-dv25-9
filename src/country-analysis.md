@@ -1,12 +1,10 @@
 ---
 theme: dashboard
 title: Gaming country analysis
-toc: false
+toc: true
 ---
 
 # Gaming country distribution analysis
-
-This visualization shows the distribution of game downloads and player activity across different countries for Steam, PlayStation, and Xbox platforms.
 
 ```js
 // Load and process the country data
@@ -14,7 +12,7 @@ async function loadCountryData() {
   // Load player data for each platform
   const playstationPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/players.csv").csv();
   const steamPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/players.csv").csv();
-  const xboxPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/players.csv").csv();
+  //const xboxPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/players.csv").csv();
   
   // Load world map data
   const worldTopoJson = await FileAttachment("./data/countries-110m.json").json();
@@ -50,7 +48,7 @@ async function loadCountryData() {
   // Generate counts for each platform
   const playstationByCountry = countPlayersByCountry(playstationPlayers, "PlayStation");
   const steamByCountry = countPlayersByCountry(steamPlayers, "Steam");
-  const xboxByCountry = countPlayersByCountry(xboxPlayers, "Xbox");
+  //const xboxByCountry = countPlayersByCountry(xboxPlayers, "Xbox");
   
   // Generate combined country counts
   function combineCountryData(countryDataSets) {
@@ -72,7 +70,7 @@ async function loadCountryData() {
   const allPlatformsByCountry = combineCountryData([
     playstationByCountry,
     steamByCountry,
-    xboxByCountry
+    //xboxByCountry
   ]);
   
   // Calculate statistics
@@ -115,7 +113,7 @@ async function loadCountryData() {
     allPlatformsByCountry,
     playstationByCountry,
     steamByCountry,
-    xboxByCountry,
+    //xboxByCountry,
     worldGeojson,
     totalCountries,
     totalPlayers,
@@ -134,69 +132,20 @@ function createStatsCards() {
   const countryCard = document.createElement("div");
   countryCard.className = "card p-4";
   countryCard.innerHTML = `
-    <h2 style="font-size: 16px; margin-bottom: 8px;">Total Countries</h2>
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total countries</h2>
     <span style="font-size: 28px; font-weight: bold;">${countryData.totalCountries.toLocaleString("en-US")}</span>
   `;
   
   const playerCard = document.createElement("div");
   playerCard.className = "card p-4";
   playerCard.innerHTML = `
-    <h2 style="font-size: 16px; margin-bottom: 8px;">Total Players</h2>
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total players with location data</h2>
     <span style="font-size: 28px; font-weight: bold;">${countryData.totalPlayers.toLocaleString("en-US")}</span>
   `;
   
   container.appendChild(countryCard);
   container.appendChild(playerCard);
   return container;
-}
-
-// Create genre filter component (similar to genre filter in genre-analysis)
-function createGenreFilter() {
-  const filterContainer = document.createElement("div");
-  filterContainer.className = "card mb-4";
-  
-  const filterContent = document.createElement("div");
-  filterContent.className = "filter-controls p-3 d-flex align-items-center";
-  
-  // Create label
-  const label = document.createElement("label");
-  label.htmlFor = "genre-select";
-  label.textContent = "Filter by genre: ";
-  label.className = "mb-0 me-3 fw-bold"; //mss extra margin aan rechterkant
-  
-  // Create dropdown with genres
-  const select = document.createElement("select");
-  select.id = "genre-select";
-  select.className = "form-select";
-  select.style.width = "220px";
-  
-  // Add genre options
-  const genres = [
-    "All genres",
-    "Action",
-    "Adventure", 
-    "First Person Shooter",
-    "RPG",
-    "Platformer",
-    "Puzzle",
-    "Racing",
-    "Simulation",
-    "Sports",
-    "Strategy"
-  ];
-  
-  genres.forEach(genre => {
-    const option = document.createElement("option");
-    option.value = genre === "All genres" ? "" : genre.toLowerCase();
-    option.textContent = genre;
-    select.appendChild(option);
-  });
-  
-  filterContent.appendChild(label);
-  filterContent.appendChild(select);
-  filterContainer.appendChild(filterContent);
-  
-  return filterContainer;
 }
 
 // World map chart function
@@ -294,7 +243,7 @@ function countryBarChart(width) {
     width,
     height: 450,
     marginLeft: 150,
-    title: "Top countries by player count",
+    title: "",
     x: {
       label: "Players",
       grid: true
@@ -326,12 +275,16 @@ function countryBarChart(width) {
 
 ${createStatsCards()}
 
-${createGenreFilter()}
+This section focuses on the geographical distribution of players. The data includes 249 countries and about 600,000 players. The entire dataset contains more than 1 million players, but some players on Steam choose to keep location data private, while on Xbox it's not possible to add location data to your account. Still, the dataset provides useful insight into regional player trends. The potential skew of this dataset will be discussed later on.
 
 # Global player distribution
 
 ${resize(worldMapChart)}
 
+This is a choropleth map that shows where gamers are located around the world. The United States leads by a wide margin, followed by countries like Brazil, Russia, and China. Richer countries also show a strong gaming presence, while poorer countries don't. Interestingly, even Antarctica appears in the dataset (with 446 players) though it's been cut from the visual for clarity.
+
 # Most popular gaming countries
 
 ${resize(countryBarChart)}
+
+This bar chart presents the same data in a more detailed format. It clearly shows that the US has the most players — more than double the number of second-place Brazil. This suggests that the dataset has a possible US bias, as other sources indicate that China likely has the most gamers worldwide. It's also important to note that mobile games are not handled in this dataset, which might also explain this discrepancy.
