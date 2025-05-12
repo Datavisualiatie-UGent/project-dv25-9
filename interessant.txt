@@ -12,6 +12,7 @@ platforms:
 - Geen data over recente releases, dus lijn gaat naar beneden
 - Dataset was niet erg betrouwbaar, data voor 2020 week erg af van de echte data, en nog steeds is dit een onderschatting van de echte data
 - Downloads voordat Steam bestond: Valve games die gemaakt zijn voordat steam bestond, en dan retroactief op steam gezet zijn, met originele release datum
+- boom net voor kerst
 
 RUBEN:
 steam eigen prijs kiezen -> uitschieters die grafiek opfokken

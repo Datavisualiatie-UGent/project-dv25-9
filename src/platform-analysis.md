@@ -1,6 +1,6 @@
 ---
 theme: dashboard
-title: Gaming platform analysis
+title: What do gamers play on?
 toc: true
 ---
 
@@ -578,7 +578,7 @@ function monthlyReleasesChart(width) {
 
 ${createSummaryStats()}
 
-In this section we show the total number of game downloads and releases across major platforms. The dataset includes over 30 million downloads and thousands of releases. As discussed before, this is likely a subset of the full picture as GTA V alone has sold over 200 million copies. This highlights that the data gives trends, not complete market coverage. It’s still useful for comparing platforms and identifying patterns.
+In this section we show the total number of game downloads and releases across major platforms. The dataset includes over 30 million downloads and thousands of releases. This is likely a subset of the full picture as GTA V alone has sold over 200 million copies. This highlights that the data gives trends, not complete market coverage. It’s still useful for comparing platforms and identifying patterns. The potential skew of this dataset will be discussed later on.
 
 # Cumulative game downloads
 
@@ -590,4 +590,4 @@ This graph shows the total number of downloads over time per platform. Xbox lead
 
 ${resize(monthlyReleasesChart)}
 
-This chart shows the number of game releases per month, broken down by platform. The size of each point represents the average number of downloads per game that month. Steam has the highest volume of releases overall. However, PlayStation and Xbox games tend to receive more downloads per title. The final months show a downward trend in releases, again due to the dataset not being fully updated.
+This chart shows the number of game releases per month, broken down by platform. The size of each point represents the average number of downloads per game that month. Steam has the highest volume of releases overall. However, PlayStation and Xbox games tend to receive more downloads per title. It also shows clearly that most games release during October of each year, as this is right before the holiday season. The final months show a downward trend in releases, again due to the dataset not being fully updated.

@@ -7,8 +7,8 @@ export default {
   // all pages will be listed in alphabetical order. Listing pages explicitly
   // lets you organize them into sections and have unlisted pages.
   pages: [
-    {name: "Where are gamers?", path: "/country-analysis"},
     {name: "What do gamers play on?", path: "/platform-analysis"},
+    {name: "Where are gamers?", path: "/country-analysis"},
     {name: "What do gamers think?",   path: "/review-analysis"},
     {name: "Which genres do gamers play?", path: "/genre-analyse"},
     {name: "How do gamers spend?", path: "/profit-analysis"},

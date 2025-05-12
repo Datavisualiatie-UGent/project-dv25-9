@@ -1,6 +1,6 @@
 ---
 theme: dashboard
-title: Steam review analysis
+title: What do gamers think?
 toc: true
 ---
 

@@ -275,7 +275,7 @@ function countryBarChart(width) {
 
 ${createStatsCards()}
 
-This section focuses on the geographical distribution of players. The data includes 249 countries and about 600,000 players. The entire dataset contains more than 1 million players, but some players on Steam choose to keep location data private, while on Xbox it's not possible to add location data to your account. Still, the dataset provides useful insight into regional player trends. The potential skew of this dataset will be discussed later on.
+This section focuses on the geographical distribution of players. The data includes 249 countries and about 600,000 players. The entire dataset contains more than 1 million players, but some players on Steam choose to keep location data private, while on Xbox it's not possible to add location data to your account. Still, the dataset provides useful insight into regional player trends.
 
 # Global player distribution
 
