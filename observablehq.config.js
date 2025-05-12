@@ -1,17 +1,17 @@
 // See https://observablehq.com/framework/config for documentation.
 export default {
   // The app’s title; used in the sidebar and webpage titles.
-  title: "Gaming Profiles",
+  title: "Wie zijn gamers?",
 
   // The pages and sections in the sidebar. If you don’t specify this option,
   // all pages will be listed in alphabetical order. Listing pages explicitly
   // lets you organize them into sections and have unlisted pages.
   pages: [
-    {name: "Profit", path: "/profit-analysis"},
-    {name: "Genres", path: "/genre-analyse"},
-    {name: "Countries", path: "/country-analysis"},
-    {name: "Platforms", path: "/platform-analysis"},
-    {name: "Reviews",   path: "/review-analysis"},
+    {name: "Where are gamers?", path: "/country-analysis"},
+    {name: "What do gamers play on?", path: "/platform-analysis"},
+    {name: "What do gamers think?",   path: "/review-analysis"},
+    {name: "Which genres do gamers play?", path: "/genre-analyse"},
+    {name: "How do gamers spend?", path: "/profit-analysis"},
   ],
 
   // Content to add to the head of the page, e.g. for a favicon:
