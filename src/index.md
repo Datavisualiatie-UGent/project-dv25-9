@@ -3,8 +3,10 @@ toc: false
 ---
 
 <div class="hero">
-  <h1>Gaming Profiles (2025)</h1>
-  <h2>Comparison of user behaviour across different gaming platform (Steam, PlayStation, XBox) using 2025 data.</h2>
+  <h1>Gaming Profiles</h1>
+  <h2>Comparison of user behaviour across different gaming platform (Steam, PlayStation, XBox).</h2>
+  </br>
+  <h2>Made by Floris Kornelis van Dijken & Ruben Vandamme.</h2>
 </div>
 
 <style>

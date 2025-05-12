@@ -1,3 +1,8 @@
+---
+theme: dashboard
+title: Genre analysis
+toc: false
+---
 
 <!-- All the data & functions related to interpreting genres. -->
 ```js
@@ -231,7 +236,7 @@ let viewSelectedMinGamesAmount = view(selectedMinGamesAmount);
 ```
 
 ```js
-const selectedGenres = Inputs.select(genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), {
+const selectedGenres = Inputs.checkbox(genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), {
     label: "Included genres:",
     multiple: true,
     value: genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), // default
@@ -287,20 +292,17 @@ function displayHeatmap(width) {
 <!-- Correlation Matrix display -->
 # Correlation matrix of genres
 
-### Settings:
 <div class="card">
   ${selectedPlatform}
   ${selectedMinGamesAmount}
-  ${statCard(viewSelectedPlatform, viewSelectedMinGamesAmount)}
   ${selectedGenres}
 </div>
 
-### Chart:
 <div class="card">
   ${resize((width) => displayHeatmap(width))}
+  ${statCard(viewSelectedPlatform, viewSelectedMinGamesAmount)}
 </div>
 
-### Explanation:
 The darkness of a square represents (in %) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
 1. Action (y-axis)  & Violent (x-axis) -> 0.8% of Action games are also Violent.
 2. Violent (y-axis) & Action  (x-axis) -> 71.8% of Violent games are also Action.
@@ -356,7 +358,8 @@ function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { w
     width,
     height: 500,
     x: {
-      grid: true
+      grid: true,
+      tickFormat: d3.format("d")
     },
     y: {
       grid: true
@@ -398,11 +401,11 @@ function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { w
       }),
 
       // Crosshair lines (axis-aligned rules + labels)
-      Plot.crosshair(points, {
-        x: "year",
-        y: "count",
-        z: 100,
-      })
+      //Plot.crosshair(points, {
+      //  x: "year",
+      //  y: "count",
+      //  z: 100,
+      //})
     ]
   });
 }
@@ -430,7 +433,7 @@ let viewSelectedMinGamesAmount2 = view(selectedMinGamesAmount2);
 ```
 
 ```js
-const selectedGenres2 = Inputs.select(genresAboveMinGamesAmount(viewSelectedMinGamesAmount2, viewSelectedPlatform2), {
+const selectedGenres2 = Inputs.checkbox(genresAboveMinGamesAmount(viewSelectedMinGamesAmount2, viewSelectedPlatform2), {
     label: "Included genres:",
     multiple: true,
     value: ["Action", "Strategy", "Indie", "Free To Play"]
@@ -467,11 +470,9 @@ function displayLinechart(width) {
 <!-- Line Chart display -->
 # Release trend of genres
 
-### Settings:
 <div class="card">
   ${selectedPlatform2}
   ${selectedMinGamesAmount2}
-  ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
   ${selectedGenres2}
 </div>
 
@@ -480,12 +481,11 @@ function displayLinechart(width) {
   ${selectedRelative2}
 </div>
 
-### Chart:
 <div class="card">
   ${resize((width) => displayLinechart(width))}
+  ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
 </div>
 
-### Explanation:
 Action and Strategy games were more popular in the early 2000's, compared to now.
 This could be explained because as the amount of games increase, more specific sub-genres are being used.
 The term Indie was not really in use at that time, but became mainstream quickly after.
