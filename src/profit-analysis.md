@@ -1,8 +1,12 @@
 ---
 theme: dashboard
-title: Introduction
-toc: false
+title: Profit analysis
+toc: true
 ---
+
+# How do gamers spend?
+</br>
+
 
 <!-- All the data & functions related to interpreting genres. -->
 ```js
@@ -285,7 +289,7 @@ function displayScatterPlot(width) {
 }
 ```
 
-# Profit of games
+# Game profits
 
 <div class="card">
   ${selectedPlatform}

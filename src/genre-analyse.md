@@ -1,8 +1,11 @@
 ---
 theme: dashboard
 title: Genre analysis
-toc: false
+toc: true
 ---
+
+# Which genres do gamers play?
+</br>
 
 <!-- All the data & functions related to interpreting genres. -->
 ```js
@@ -290,7 +293,7 @@ function displayHeatmap(width) {
 ```
 
 <!-- Correlation Matrix display -->
-# Correlation matrix of genres
+## Correlation between genres
 
 <div class="card">
   ${selectedPlatform}
@@ -468,7 +471,7 @@ function displayLinechart(width) {
 ```
 
 <!-- Line Chart display -->
-# Release trend of genres
+## Genre release trend
 
 <div class="card">
   ${selectedPlatform2}
