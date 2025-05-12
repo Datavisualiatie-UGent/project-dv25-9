@@ -1,3 +1,8 @@
+---
+theme: dashboard
+title: Genre analysis
+toc: false
+---
 
 <!-- All the data & functions related to interpreting genres. -->
 ```js
@@ -287,7 +292,6 @@ function displayHeatmap(width) {
 <!-- Correlation Matrix display -->
 # Correlation matrix of genres
 
-### Settings:
 <div class="card">
   ${selectedPlatform}
   ${selectedMinGamesAmount}
@@ -295,12 +299,10 @@ function displayHeatmap(width) {
   ${selectedGenres}
 </div>
 
-### Chart:
 <div class="card">
   ${resize((width) => displayHeatmap(width))}
 </div>
 
-### Explanation:
 The darkness of a square represents (in %) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
 1. Action (y-axis)  & Violent (x-axis) -> 0.8% of Action games are also Violent.
 2. Violent (y-axis) & Action  (x-axis) -> 71.8% of Violent games are also Action.
@@ -467,7 +469,6 @@ function displayLinechart(width) {
 <!-- Line Chart display -->
 # Release trend of genres
 
-### Settings:
 <div class="card">
   ${selectedPlatform2}
   ${selectedMinGamesAmount2}
@@ -480,12 +481,10 @@ function displayLinechart(width) {
   ${selectedRelative2}
 </div>
 
-### Chart:
 <div class="card">
   ${resize((width) => displayLinechart(width))}
 </div>
 
-### Explanation:
 Action and Strategy games were more popular in the early 2000's, compared to now.
 This could be explained because as the amount of games increase, more specific sub-genres are being used.
 The term Indie was not really in use at that time, but became mainstream quickly after.
