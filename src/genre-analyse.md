@@ -236,7 +236,7 @@ let viewSelectedMinGamesAmount = view(selectedMinGamesAmount);
 ```
 
 ```js
-const selectedGenres = Inputs.select(genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), {
+const selectedGenres = Inputs.checkbox(genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), {
     label: "Included genres:",
     multiple: true,
     value: genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), // default
@@ -295,12 +295,12 @@ function displayHeatmap(width) {
 <div class="card">
   ${selectedPlatform}
   ${selectedMinGamesAmount}
-  ${statCard(viewSelectedPlatform, viewSelectedMinGamesAmount)}
   ${selectedGenres}
 </div>
 
 <div class="card">
   ${resize((width) => displayHeatmap(width))}
+  ${statCard(viewSelectedPlatform, viewSelectedMinGamesAmount)}
 </div>
 
 The darkness of a square represents (in %) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
@@ -358,7 +358,8 @@ function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { w
     width,
     height: 500,
     x: {
-      grid: true
+      grid: true,
+      tickFormat: d3.format("d")
     },
     y: {
       grid: true
@@ -400,11 +401,11 @@ function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { w
       }),
 
       // Crosshair lines (axis-aligned rules + labels)
-      Plot.crosshair(points, {
-        x: "year",
-        y: "count",
-        z: 100,
-      })
+      //Plot.crosshair(points, {
+      //  x: "year",
+      //  y: "count",
+      //  z: 100,
+      //})
     ]
   });
 }
@@ -432,7 +433,7 @@ let viewSelectedMinGamesAmount2 = view(selectedMinGamesAmount2);
 ```
 
 ```js
-const selectedGenres2 = Inputs.select(genresAboveMinGamesAmount(viewSelectedMinGamesAmount2, viewSelectedPlatform2), {
+const selectedGenres2 = Inputs.checkbox(genresAboveMinGamesAmount(viewSelectedMinGamesAmount2, viewSelectedPlatform2), {
     label: "Included genres:",
     multiple: true,
     value: ["Action", "Strategy", "Indie", "Free To Play"]
@@ -472,7 +473,6 @@ function displayLinechart(width) {
 <div class="card">
   ${selectedPlatform2}
   ${selectedMinGamesAmount2}
-  ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
   ${selectedGenres2}
 </div>
 
@@ -483,6 +483,7 @@ function displayLinechart(width) {
 
 <div class="card">
   ${resize((width) => displayLinechart(width))}
+  ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
 </div>
 
 Action and Strategy games were more popular in the early 2000's, compared to now.

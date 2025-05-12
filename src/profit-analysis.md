@@ -296,7 +296,7 @@ function displayScatterPlot(width) {
   ${resize((width) => displayScatterPlot(width))}
 </div>
 
-This scatter plot shows for each game the selling price on the x-axis and the amount of downloads, or amount of units sold, on the y-axis. The profits is calculated as the amount of downloads times the price. The mean profit of all games was calculated and is shown on the plot as the red line. Games below this line have less profit than the average game. Games above the line have more. The color of a dot indicates the total profit of the game; the higher, the redder.
+This scatter plot shows for each game the selling price on the x-axis and the amount of downloads, or amount of units sold, on the y-axis. The profit is calculated as the amount of downloads times the price. The mean profit of all games is shown as the red line. Games below this line have less profit than the average game. Games above the line have more. The color of a dot indicates the total profit; the redder, the higher.
 
 <!-- ============================================================================================================== -->
 <br></br>
