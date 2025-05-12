@@ -308,7 +308,7 @@ const selectedPlatform2 = Inputs.radio(
   Object.keys(platformSpecificDataMap), {
     label: "Platform:",
     multiple: false,
-    value: "Playstation", // default
+    value: "All", // default
   });
 let viewSelectedPlatform2 = view(selectedPlatform2);
 ```
