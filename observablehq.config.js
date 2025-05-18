@@ -20,8 +20,10 @@ export default {
   // The path to the source root.
   root: "src",
 
+  style: "main-style.css",
+
   // Some additional configuration options and their defaults:
-  // theme: "default", // try "light", "dark", "slate", etc.
+  theme: "glacier", // try "light", "dark", "slate", etc.
   // header: "", // what to show in the header (HTML)
   // footer: "Built with Observable.", // what to show in the footer (HTML)
   // sidebar: true, // whether to show the sidebar
@@ -42,7 +44,8 @@ export default {
     "@observablehq/htl",
     "vega",
     "vega-lite",
-    "vega-embed"
+    "vega-embed",
+    "./src/dataloader.js"
   ],
 
   runtime: {

@@ -1,5 +1,4 @@
 ---
-theme: dashboard
 title: What do gamers think?
 toc: true
 ---

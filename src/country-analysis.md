@@ -1,6 +1,5 @@
 ---
-theme: dashboard
-title: Gaming country analysis
+title: Where are gamers?
 toc: true
 ---
 
