@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="generator" content="Observable Framework v1.13.2">
+<title>Where are gamers? | Who are gamers?</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="preload" as="style" href="./_import/main-style.9a967542.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="stylesheet" type="text/css" href="./_import/main-style.9a967542.css">
+<link rel="modulepreload" href="./_observablehq/client.512864c7.js">
+<link rel="modulepreload" href="./_observablehq/runtime.e080113b.js">
+<link rel="modulepreload" href="./_observablehq/stdlib.82806664.js">
+<link rel="modulepreload" href="./_npm/d3@7.9.0/e780feca.js">
+<link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.17/d761ef9b.js">
+<link rel="modulepreload" href="./_npm/topojson-client@3.1.0/edd9ee95.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/9cffc2bd.js">
+<link rel="modulepreload" href="./_npm/d3-array@3.2.4/e93ca09f.js">
+<link rel="modulepreload" href="./_npm/d3-axis@3.0.0/0f2de24d.js">
+<link rel="modulepreload" href="./_npm/d3-brush@3.0.0/65eb105b.js">
+<link rel="modulepreload" href="./_npm/d3-chord@3.0.1/7ef8fb2e.js">
+<link rel="modulepreload" href="./_npm/d3-color@3.1.0/aeb57b94.js">
+<link rel="modulepreload" href="./_npm/d3-contour@4.0.2/1d2aed74.js">
+<link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/5ced1d52.js">
+<link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/9ba9c7f3.js">
+<link rel="modulepreload" href="./_npm/d3-drag@3.0.0/4202580c.js">
+<link rel="modulepreload" href="./_npm/d3-ease@3.0.1/cdd7e898.js">
+<link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/b4e2ad9a.js">
+<link rel="modulepreload" href="./_npm/d3-force@3.0.0/5e804d15.js">
+<link rel="modulepreload" href="./_npm/d3-format@3.1.0/86074ef6.js">
+<link rel="modulepreload" href="./_npm/d3-geo@3.1.1/40599fb3.js">
+<link rel="modulepreload" href="./_npm/d3-hierarchy@3.1.2/e49e792c.js">
+<link rel="modulepreload" href="./_npm/d3-interpolate@3.0.1/8d1e5425.js">
+<link rel="modulepreload" href="./_npm/d3-path@3.1.0/20d3f133.js">
+<link rel="modulepreload" href="./_npm/d3-polygon@3.0.1/7553081f.js">
+<link rel="modulepreload" href="./_npm/d3-quadtree@3.0.1/0dfd751c.js">
+<link rel="modulepreload" href="./_npm/d3-random@3.0.1/3c90ee06.js">
+<link rel="modulepreload" href="./_npm/d3-scale@4.0.2/843b6a76.js">
+<link rel="modulepreload" href="./_npm/d3-scale-chromatic@3.1.0/ba24c2e7.js">
+<link rel="modulepreload" href="./_npm/d3-selection@3.0.0/4d94e5b7.js">
+<link rel="modulepreload" href="./_npm/d3-shape@3.2.0/6d3a6726.js">
+<link rel="modulepreload" href="./_npm/d3-time@3.1.0/9f03c579.js">
+<link rel="modulepreload" href="./_npm/d3-time-format@4.1.0/07c9626f.js">
+<link rel="modulepreload" href="./_npm/d3-timer@3.0.1/b58a267d.js">
+<link rel="modulepreload" href="./_npm/d3-transition@3.0.1/004da2ac.js">
+<link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/b5786b3f.js">
+<link rel="modulepreload" href="./_npm/isoformat@0.2.1/18cbf477.js">
+<link rel="modulepreload" href="./_npm/interval-tree-1d@1.0.4/53fe8176.js">
+<link rel="modulepreload" href="./_npm/internmap@2.0.3/e08981d9.js">
+<link rel="modulepreload" href="./_npm/delaunator@5.0.1/02d43215.js">
+<link rel="modulepreload" href="./_npm/binary-search-bounds@2.0.5/cbf6ba23.js">
+<link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/aa00730b.js">
+<link rel="icon" href="./_file/icon.7a94a462.png" type="image/png" sizes="32x32">
+<script type="module">
+
+import {define} from "./_observablehq/client.512864c7.js";
+import {registerFile} from "./_observablehq/stdlib.82806664.js";
+
+registerFile("./data/countries-110m.json", {"name":"./data/countries-110m.json","mimeType":"application/json","path":"./_file/data/countries-110m.2516c915.json","lastModified":1746536848679,"size":107761});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/players.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/players.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/players.f40a902e.csv","lastModified":1746537849821,"size":10705226});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/players.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/players.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/players.dff50f60.csv","lastModified":1746537853413,"size":18413259});
+
+define({id: "4e07f9f5", inputs: ["FileAttachment","topojson","d3","Plot"], outputs: ["loadCountryData","countryData","createStatsCards","worldMapChart","countryBarChart"], body: async (FileAttachment,topojson,d3,Plot) => {
+// Load and process the country data
+async function loadCountryData() {
+  // Load player data for each platform
+  const playstationPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/players.csv").csv();
+  const steamPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/players.csv").csv();
+  //const xboxPlayers = await FileAttachment("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/players.csv").csv();
+  
+  // Load world map data
+  const worldTopoJson = await FileAttachment("./data/countries-110m.json").json();
+
+  // Convert TopoJSON to GeoJSON
+  const geoJsonObject = topojson.feature(worldTopoJson, worldTopoJson.objects.countries || Object.values(worldTopoJson.objects)[0]);
+  const worldGeojson = {
+    type: "FeatureCollection", 
+    features: geoJsonObject.features
+  };
+  
+  // Process and count players by country and platform
+  function countPlayersByCountry(playerData, platformName) {
+    // Create a map to store counts by country
+    const countryCounts = new Map();
+    
+    // Process players
+    playerData.forEach(player => {
+      if (player.country) {
+        const country = player.country;
+        countryCounts.set(country, (countryCounts.get(country) || 0) + 1);
+      }
+    });
+    
+    // Convert to array format for visualization
+    return Array.from(countryCounts, ([country, count]) => ({
+      country,
+      count: count,
+      platform: platformName
+    })).sort((a, b) => b.count - a.count);
+  }
+  
+  // Generate counts for each platform
+  const playstationByCountry = countPlayersByCountry(playstationPlayers, "PlayStation");
+  const steamByCountry = countPlayersByCountry(steamPlayers, "Steam");
+  //const xboxByCountry = countPlayersByCountry(xboxPlayers, "Xbox");
+  
+  // Generate combined country counts
+  function combineCountryData(countryDataSets) {
+    const combinedMap = new Map();
+    
+    countryDataSets.forEach(dataset => {
+      dataset.forEach(({country, count}) => {
+        combinedMap.set(country, (combinedMap.get(country) || 0) + count);
+      });
+    });
+    
+    return Array.from(combinedMap, ([country, count]) => ({
+      country,
+      count: count,
+      platform: "All Platforms"
+    })).sort((a, b) => b.count - a.count);
+  }
+  
+  const allPlatformsByCountry = combineCountryData([
+    playstationByCountry,
+    steamByCountry,
+    //xboxByCountry
+  ]);
+  
+  // Calculate statistics
+  const totalCountries = new Set(allPlatformsByCountry.map(d => d.country)).size;
+  const totalPlayers = allPlatformsByCountry.reduce((sum, d) => sum + d.count, 0);
+  
+  // Country name mapping for the visualization
+  const countryNameMapping = {
+    "Russia": "Russian Federation",
+    "W. Sahara": "Western Sahara",
+    "Dem. Rep. Congo": "Congo, The Democratic Republic of the",
+    "Dominican Rep.": "Dominican Republic",
+    "Falkland Is.": "Falkland Islands (Malvinas)",
+    "Fr. S. Antarctic Lands": "French Southern Territories",
+    "Bolivia": "Bolivia, Plurinational State of",
+    "Venezuela": "Venezuela, Bolivarian Republic of",
+    "Central African Rep.": "Central African Republic",
+    "Eq. Guinea": "Equatorial Guinea",
+    "eSwatini": "Eswatini",
+    "Palestine": "Palestine, State of",
+    "Laos": "Lao People's Democratic Republic",
+    "Vietnam": "Viet Nam",
+    "North Korea": "Korea, Democratic People's Republic of",
+    "South Korea": "Korea, Republic of",
+    "Iran": "Iran, Islamic Republic of",
+    "Syria": "Syrian Arab Republic",
+    "Moldova": "Moldova, Republic of",
+    "Turkey": "Türkiye",
+    "Solomon Is.": "Solomon Islands",
+    "Taiwan": "Taiwan, Province of China",
+    "Brunei": "Brunei Darussalam",
+    "Bosnia and Herz.": "Bosnia and Herzegovina",
+    "Macedonia": "North Macedonia",
+    "S. Sudan": "South Sudan",
+    "Tanzania": "Tanzania, United Republic of",
+    "United States of America": "United States"
+  };
+  
+  return {
+    allPlatformsByCountry,
+    playstationByCountry,
+    steamByCountry,
+    //xboxByCountry,
+    worldGeojson,
+    totalCountries,
+    totalPlayers,
+    countryNameMapping
+  };
+}
+
+// Load the data
+const countryData = await loadCountryData();
+
+// Create a stats card that displays key metrics
+function createStatsCards() {
+  const container = document.createElement("div");
+  container.className = "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4";
+  
+  const countryCard = document.createElement("div");
+  countryCard.className = "card p-4";
+  countryCard.innerHTML = `
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total countries</h2>
+    <span style="font-size: 28px; font-weight: bold;">${countryData.totalCountries.toLocaleString("en-US")}</span>
+  `;
+  
+  const playerCard = document.createElement("div");
+  playerCard.className = "card p-4";
+  playerCard.innerHTML = `
+    <h2 style="font-size: 16px; margin-bottom: 8px;">Total players with location data</h2>
+    <span style="font-size: 28px; font-weight: bold;">${countryData.totalPlayers.toLocaleString("en-US")}</span>
+  `;
+  
+  container.appendChild(countryCard);
+  container.appendChild(playerCard);
+  return container;
+}
+
+// World map chart function
+function worldMapChart(width) {
+  // Create a color scale for the choropleth
+  const colorScale = d3.scaleSqrt()
+    .domain([1, d3.max(countryData.allPlatformsByCountry, d => d.count)])
+    .range(["#c6dbef", "#08519c"]); // Lighter blue to dark blue
+    
+  // Create a lookup map for faster access
+  const countryLookup = new Map(countryData.allPlatformsByCountry.map(d => [d.country, d.count]));
+
+  // Create the plot
+  return Plot.plot({
+    width,
+    height: width * 0.6,
+    projection: {
+      type: "mercator",
+      domain: {
+        type: "MultiPoint", 
+        coordinates: [[-180, -50], [180, 75]]  // Limit latitude range from -50° to 75°
+      }
+    },
+    style: {
+      backgroundColor: "transparent",
+      color: "black",
+      fontFamily: "system-ui, sans-serif"
+    },
+    color: {
+      type: "sqrt",
+      domain: [1, d3.max(countryData.allPlatformsByCountry, d => d.count)],
+      range: ["#c6dbef", "#08519c"],
+      legend: true,
+      tickFormat: "~s",
+      label: "Players"
+    },
+    marks: [
+      // Draw the countries with colors based on player counts
+      Plot.geo(countryData.worldGeojson.features, {
+        fill: d => {
+          const countryName = d.properties.name || d.properties.NAME || d.properties.ADMIN;
+          const mappedName = countryData.countryNameMapping[countryName];
+          let count = null;
+          
+          if (mappedName) {
+            count = countryLookup.get(mappedName);
+          }
+          
+          if (!count) {
+            count = countryLookup.get(countryName);
+          }
+          
+          return count ? colorScale(count) : "#f0f0f0"; // Gray for countries with no data
+        },
+        stroke: "white",
+        strokeWidth: 0.5,
+        title: d => {
+          const countryName = d.properties.name || d.properties.NAME || d.properties.ADMIN;
+          const mappedName = countryData.countryNameMapping[countryName];
+          
+          let count = null;
+          if (mappedName) {
+            count = countryLookup.get(mappedName);
+          }
+          
+          if (!count) {
+            count = countryLookup.get(countryName);
+          }
+          
+          return count 
+            ? `${countryName}: ${count.toLocaleString()} players` 
+            : `${countryName}: No data`;
+        }
+      }),
+      // Add graticules for visual reference
+      Plot.graticule({
+        stroke: "#ddd",
+        strokeOpacity: 0.5
+      }),
+      // Draw the sphere (outline of the earth)
+      Plot.sphere({
+        stroke: "#aaa",
+        strokeOpacity: 0.5
+      })
+    ]
+  });
+}
+
+// Top countries bar chart function
+function countryBarChart(width) {
+  // Take only top 15 countries
+  const topCountries = countryData.allPlatformsByCountry.slice(0, 15);
+  
+  return Plot.plot({
+    width,
+    height: 450,
+    marginLeft: 150,
+    title: "",
+    x: {
+      label: "Players",
+      grid: true
+    },
+    y: {
+      label: null,
+      domain: topCountries.map(d => d.country)
+    },
+    marks: [
+      Plot.barX(topCountries, {
+        y: "country",
+        x: "count",
+        fill: "steelblue",
+        sort: {y: "-x"}
+      }),
+      Plot.ruleX([0]),
+      Plot.text(topCountries, {
+        x: d => d.count / 2, // Position text in middle of bars
+        y: "country",
+        text: d => d.count.toLocaleString(),
+        textAnchor: "middle", // Center text horizontally
+        fill: "white", // White text for better contrast on blue bars
+        fontWeight: "bold" // Make text stand out better
+      })
+    ]
+  });
+}
+return {loadCountryData,countryData,createStatsCards,worldMapChart,countryBarChart};
+}});
+
+define({id: "5c690cd9", mode: "inline", inputs: ["createStatsCards","display"], body: async (createStatsCards,display) => {
+display(await(
+createStatsCards()
+))
+}});
+
+define({id: "c908476e", mode: "inline", inputs: ["resize","worldMapChart","display"], body: async (resize,worldMapChart,display) => {
+display(await(
+resize(worldMapChart)
+))
+}});
+
+define({id: "1742ed3a", mode: "inline", inputs: ["resize","countryBarChart","display"], body: async (resize,countryBarChart,display) => {
+display(await(
+resize(countryBarChart)
+))
+}});
+
+</script>
+</head>
+<body>
+<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
+<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
+<nav id="observablehq-sidebar">
+  <ol>
+    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
+    <li class="observablehq-link"><a href="./">Who are gamers?</a></li>
+  </ol>
+  <ol>
+    <li class="observablehq-link"><a href="./platform-analysis">What do gamers play on?</a></li>
+    <li class="observablehq-link observablehq-link-active"><a href="./country-analysis">Where are gamers?</a></li>
+    <li class="observablehq-link"><a href="./review-analysis">What do gamers think?</a></li>
+    <li class="observablehq-link"><a href="./genre-analyse">Which genres do gamers play?</a></li>
+    <li class="observablehq-link"><a href="./profit-analysis">How do gamers spend?</a></li>
+  </ol>
+</nav>
+<script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
+<div id="observablehq-center">
+<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
+<nav>
+<div>Contents</div>
+<ol>
+<li class="observablehq-secondary-link"><a href="#global-player-distribution">Global player distribution</a></li>
+<li class="observablehq-secondary-link"><a href="#most-popular-gaming-countries">Most popular gaming countries</a></li>
+</ol>
+</nav>
+</aside>
+<main id="observablehq-main" class="observablehq">
+<h1 id="where-are-gamers" tabindex="-1"><a class="observablehq-header-anchor" href="#where-are-gamers">Where are gamers?</a></h1>
+<div class="observablehq observablehq--block"><!--:4e07f9f5:--></div>
+<p><observablehq-loading></observablehq-loading><!--:5c690cd9:--></p>
+<p>This section focuses on the geographical distribution of players. The data includes 249 countries and about 600,000 players. The entire dataset contains more than 1 million players, but some players on Steam choose to keep location data private, while on Xbox it's not possible to add location data to your account. Still, the dataset provides useful insight into regional player trends.</p>
+<h1 id="global-player-distribution" tabindex="-1"><a class="observablehq-header-anchor" href="#global-player-distribution">Global player distribution</a></h1>
+<p><observablehq-loading></observablehq-loading><!--:c908476e:--></p>
+<p>This is a choropleth map that shows where gamers are located around the world. The United States leads by a wide margin, followed by countries like Brazil, Russia, and China. Richer countries also show a strong gaming presence, while poorer countries don't. Interestingly, even Antarctica appears in the dataset (with 446 players) though it's been cut from the visual for clarity.</p>
+<h1 id="most-popular-gaming-countries" tabindex="-1"><a class="observablehq-header-anchor" href="#most-popular-gaming-countries">Most popular gaming countries</a></h1>
+<p><observablehq-loading></observablehq-loading><!--:1742ed3a:--></p>
+<p>This bar chart presents the same data in a more detailed format. It clearly shows that the US has the most players — more than double the number of second-place Brazil. This suggests that the dataset has a possible US bias, as other sources indicate that China likely has the most gamers worldwide. It's also important to note that mobile games are not handled in this dataset, which might also explain this discrepancy.</p>
+</main>
+<footer id="observablehq-footer">
+<nav><a rel="prev" href="./platform-analysis"><span>What do gamers play on?</span></a><a rel="next" href="./review-analysis"><span>What do gamers think?</span></a></nav>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-05-18T19:37:48">May 18, 2025</a>.</div>
+</footer>
+</div>
+</body>
+</html>

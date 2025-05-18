@@ -1,0 +1,6 @@
+.DS_Store
+datavis-project/dist/
+node_modules/
+yarn-error.log
+kaggle.json
+datasets/
