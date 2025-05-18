@@ -12,9 +12,17 @@ import * as d3Cloud from "d3-cloud";
 // Load and process review data
 async function loadReviewData() {
   
-  // Load reviews
-  const reviews = await FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews.csv").csv({typed: true});
-  
+  const files = [
+    FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews_part_1.csv"),
+    FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews_part_2.csv"),
+    FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews_part_3.csv"),
+    FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews_part_4.csv"),
+    FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews_part_5.csv"),
+    FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/reviews_part_6.csv"),
+  ];
+
+  const reviews = (await Promise.all(files.map(f => f.csv({ typed: true })))).flat();
+    
   // Get total word count from reviews
   function getTotalWordCount(reviewData) {
     const reviewTexts = reviewData
@@ -123,7 +131,6 @@ async function loadReviewData() {
     
     // Process a limited number of reviews
     const sampleSize = reviewTexts.length; // INCREASED sample for better coverage
-    console.log(`Processing ${sampleSize} reviews out of ${reviewTexts.length} total`);
     
     for (let i = 0; i < sampleSize; i++) {
       const text = reviewTexts[i];

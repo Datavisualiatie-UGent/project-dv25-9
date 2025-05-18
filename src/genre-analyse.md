@@ -365,7 +365,6 @@ const colorScale = d3.scaleOrdinal()
 
 function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { width } = {}) {
 
-  console.log(yearGamesMap)
 
   // do not use 2025 as it is not complete
   if (years[years.length-1] == 2025) {

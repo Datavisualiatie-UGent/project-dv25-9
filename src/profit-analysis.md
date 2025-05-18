@@ -39,9 +39,12 @@ const gamesCSVSteam           = await FileAttachment(
 const purchasedGamesCSVSteam  = await FileAttachment(
     "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/purchased_games.csv"
 ).csv();
-const pricesCSVSteam          = await FileAttachment(
-    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices.csv"
-).csv();
+
+const files = [
+  FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices_part_1.csv"),
+  FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices_part_2.csv"),
+];
+const pricesCSVSteam = (await Promise.all(files.map(f => f.csv({ typed: true })))).flat();
 
 const gamesCSVXbox           = await FileAttachment(
     "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.csv"
