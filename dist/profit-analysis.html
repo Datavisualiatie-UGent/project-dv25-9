@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="generator" content="Observable Framework v1.13.2">
+<title>How do gamers spend? | Who are gamers?</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="preload" as="style" href="./_import/main-style.9a967542.css">
+<link rel="preload" as="style" href="./_observablehq/stdlib/inputs.ea9fd553.css">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&amp;display=swap" crossorigin>
+<link rel="stylesheet" type="text/css" href="./_import/main-style.9a967542.css">
+<link rel="stylesheet" type="text/css" href="./_observablehq/stdlib/inputs.ea9fd553.css">
+<link rel="modulepreload" href="./_observablehq/client.512864c7.js">
+<link rel="modulepreload" href="./_observablehq/runtime.e080113b.js">
+<link rel="modulepreload" href="./_observablehq/stdlib.82806664.js">
+<link rel="modulepreload" href="./_npm/d3@7.9.0/e780feca.js">
+<link rel="modulepreload" href="./_npm/htl@0.3.1/72f4716c.js">
+<link rel="modulepreload" href="./_observablehq/stdlib/inputs.6ba3de0b.js">
+<link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.17/d761ef9b.js">
+<link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/9cffc2bd.js">
+<link rel="modulepreload" href="./_npm/isoformat@0.2.1/18cbf477.js">
+<link rel="modulepreload" href="./_npm/d3-array@3.2.4/e93ca09f.js">
+<link rel="modulepreload" href="./_npm/d3-axis@3.0.0/0f2de24d.js">
+<link rel="modulepreload" href="./_npm/d3-brush@3.0.0/65eb105b.js">
+<link rel="modulepreload" href="./_npm/d3-chord@3.0.1/7ef8fb2e.js">
+<link rel="modulepreload" href="./_npm/d3-color@3.1.0/aeb57b94.js">
+<link rel="modulepreload" href="./_npm/d3-contour@4.0.2/1d2aed74.js">
+<link rel="modulepreload" href="./_npm/d3-delaunay@6.0.4/5ced1d52.js">
+<link rel="modulepreload" href="./_npm/d3-dispatch@3.0.1/9ba9c7f3.js">
+<link rel="modulepreload" href="./_npm/d3-drag@3.0.0/4202580c.js">
+<link rel="modulepreload" href="./_npm/d3-ease@3.0.1/cdd7e898.js">
+<link rel="modulepreload" href="./_npm/d3-fetch@3.0.1/b4e2ad9a.js">
+<link rel="modulepreload" href="./_npm/d3-force@3.0.0/5e804d15.js">
+<link rel="modulepreload" href="./_npm/d3-format@3.1.0/86074ef6.js">
+<link rel="modulepreload" href="./_npm/d3-geo@3.1.1/40599fb3.js">
+<link rel="modulepreload" href="./_npm/d3-hierarchy@3.1.2/e49e792c.js">
+<link rel="modulepreload" href="./_npm/d3-interpolate@3.0.1/8d1e5425.js">
+<link rel="modulepreload" href="./_npm/d3-path@3.1.0/20d3f133.js">
+<link rel="modulepreload" href="./_npm/d3-polygon@3.0.1/7553081f.js">
+<link rel="modulepreload" href="./_npm/d3-quadtree@3.0.1/0dfd751c.js">
+<link rel="modulepreload" href="./_npm/d3-random@3.0.1/3c90ee06.js">
+<link rel="modulepreload" href="./_npm/d3-scale@4.0.2/843b6a76.js">
+<link rel="modulepreload" href="./_npm/d3-scale-chromatic@3.1.0/ba24c2e7.js">
+<link rel="modulepreload" href="./_npm/d3-selection@3.0.0/4d94e5b7.js">
+<link rel="modulepreload" href="./_npm/d3-shape@3.2.0/6d3a6726.js">
+<link rel="modulepreload" href="./_npm/d3-time@3.1.0/9f03c579.js">
+<link rel="modulepreload" href="./_npm/d3-time-format@4.1.0/07c9626f.js">
+<link rel="modulepreload" href="./_npm/d3-timer@3.0.1/b58a267d.js">
+<link rel="modulepreload" href="./_npm/d3-transition@3.0.1/004da2ac.js">
+<link rel="modulepreload" href="./_npm/d3-zoom@3.0.0/b5786b3f.js">
+<link rel="modulepreload" href="./_npm/interval-tree-1d@1.0.4/53fe8176.js">
+<link rel="modulepreload" href="./_npm/internmap@2.0.3/e08981d9.js">
+<link rel="modulepreload" href="./_npm/delaunator@5.0.1/02d43215.js">
+<link rel="modulepreload" href="./_npm/binary-search-bounds@2.0.5/cbf6ba23.js">
+<link rel="modulepreload" href="./_npm/robust-predicates@3.0.2/aa00730b.js">
+<link rel="icon" href="./_file/icon.7a94a462.png" type="image/png" sizes="32x32">
+<script type="module">
+
+import {define} from "./_observablehq/client.512864c7.js";
+import {registerFile} from "./_observablehq/stdlib.82806664.js";
+
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/games.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/games.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/games.35b3498f.csv","lastModified":1746537846882,"size":3386540});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/prices.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/prices.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/prices.f1136a4b.csv","lastModified":1746537849827,"size":2320804});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/purchased_games.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/purchased_games.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/purchased_games.67402fc8.csv","lastModified":1746537850061,"size":74376997});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/games.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/games.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/games.1cb5a2bf.csv","lastModified":1746537852221,"size":17068220});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices.8ecfc324.csv","lastModified":1746537853799,"size":183917378});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/purchased_games.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/purchased_games.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/purchased_games.f1875e67.csv","lastModified":1746537854077,"size":91732993});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.0785ca99.csv","lastModified":1746537856060,"size":1284681});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/prices.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/prices.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/prices.72ead276.csv","lastModified":1746537857638,"size":823781});
+registerFile("./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/purchased_games.csv", {"name":"./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/purchased_games.csv","mimeType":"text/csv","path":"./_file/data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/purchased_games.ad9c60d4.csv","lastModified":1746537857896,"size":86494860});
+
+define({id: "a4ad7b06", outputs: ["platformColorsStart","platformColorsEnd"], body: () => {
+const platformColorsStart = {
+  "Playstation": "#e3bfff",
+  "Steam":       "#FFE3BF",
+  "Xbox":        "#BFFFE3",
+  "All":         "#cccccc"
+};
+const platformColorsEnd = {
+  "Playstation": "#000000",
+  "Steam":       "#000000",
+  "Xbox":        "#000000",
+  "All":         "#000000"
+};
+return {platformColorsStart,platformColorsEnd};
+}});
+
+define({id: "c4d4234c", inputs: ["FileAttachment","d3"], outputs: ["gamesCSVPlaystation","purchasedGamesCSVPlaystation","pricesCSVPlaystation","gamesCSVSteam","purchasedGamesCSVSteam","pricesCSVSteam","gamesCSVXbox","purchasedGamesCSVXbox","pricesCSVXbox","platformSpecificData","platformSpecificDataMap","parseRawList"], body: async (FileAttachment,d3) => {
+const gamesCSVPlaystation           = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/games.csv"
+).csv();
+const purchasedGamesCSVPlaystation  = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/purchased_games.csv"
+).csv();
+const pricesCSVPlaystation          = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/playstation/prices.csv"
+).csv();
+
+const gamesCSVSteam           = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/games.csv"
+).csv();
+const purchasedGamesCSVSteam  = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/purchased_games.csv"
+).csv();
+const pricesCSVSteam          = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices.csv"
+).csv();
+
+const gamesCSVXbox           = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.csv"
+).csv();
+const purchasedGamesCSVXbox  = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/purchased_games.csv"
+).csv();
+const pricesCSVXbox          = await FileAttachment(
+    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/prices.csv"
+).csv();
+
+function platformSpecificData(platforms) {
+  let allGames = [];
+  let minPrice = Infinity;
+  let maxPrice = -Infinity;
+  let meanProfit = 0;
+  
+  // Iterate over each platform
+  platforms.forEach(platform => {
+    let gamesCSV;
+    let purchasedGamesCSV;
+    let pricesCSV;
+
+    if (platform == "Playstation") {
+      gamesCSV = gamesCSVPlaystation;
+      purchasedGamesCSV = purchasedGamesCSVPlaystation;
+      pricesCSV = pricesCSVPlaystation;
+    } else if (platform == "Steam") {
+      gamesCSV = gamesCSVSteam;
+      purchasedGamesCSV = purchasedGamesCSVSteam;
+      pricesCSV = pricesCSVSteam;
+    } else if (platform == "Xbox") {
+      gamesCSV = gamesCSVXbox;
+      purchasedGamesCSV = purchasedGamesCSVXbox;
+      pricesCSV = pricesCSVXbox;
+    }
+
+    const downloadsMap = new Map();
+    for (const row of purchasedGamesCSV) {
+      if (!row.library || !row.library.trim()) continue;
+
+      let library;
+      try {
+        library = JSON.parse(row.library);
+      } catch (err) {
+        console.warn("Skipping invalid library JSON:", row.library, err);
+        continue;
+      }
+
+      for (const gameid of library) {
+        const id = Number(gameid);
+        downloadsMap.set(id, (downloadsMap.get(id) || 0) + 1);
+      }
+    }
+
+    const priceMap = new Map();
+    for (const row of pricesCSV) {
+      const existing = priceMap.get(row.gameid);
+      priceMap.set(parseInt(row.gameid), parseFloat(row.eur));
+    }
+
+    const platformGames = gamesCSV
+      .map((game) => {
+        const id = parseInt(game.gameid);
+        const gamePrice = priceMap.get(id);
+        const gameDownloads = downloadsMap.get(id);
+        return {
+          title: game.title,
+          price: gamePrice,
+          downloads: gameDownloads,
+          profit: gamePrice * gameDownloads,
+          developers: parseRawList(game.developers),
+          publishers: parseRawList(game.publishers),
+        };
+      })
+      .filter((e) => e.price != null && e.downloads != null)
+      .filter((e) => e.price < 80)
+      .sort((a, b) => b.profit - a.profit);
+
+    // Combine the results from all platforms
+    allGames = allGames.concat(platformGames);
+  });
+
+  // Calculate the minPrice, maxPrice, and meanProfit across all platforms
+  const profits = allGames.map(d => d.profit);
+  meanProfit = d3.mean(profits);
+  [minPrice, maxPrice] = d3.extent(allGames, d => d.price);
+
+  return [allGames, minPrice, maxPrice, meanProfit];
+}
+
+const platformSpecificDataMap = {
+  Steam:       platformSpecificData(["Steam"]),
+  Playstation: platformSpecificData(["Playstation"]),
+  Xbox:        platformSpecificData(["Xbox"]),
+  All:         platformSpecificData(["Playstation", "Steam", "Xbox"])
+};
+
+function parseRawList(raw) {
+  try {
+    return JSON.parse(raw.replace(/'/g, '"'));
+  } catch {
+    return [];
+  }
+}
+return {gamesCSVPlaystation,purchasedGamesCSVPlaystation,pricesCSVPlaystation,gamesCSVSteam,purchasedGamesCSVSteam,pricesCSVSteam,gamesCSVXbox,purchasedGamesCSVXbox,pricesCSVXbox,platformSpecificData,platformSpecificDataMap,parseRawList};
+}});
+
+define({id: "4681d766", outputs: ["downsampleFirstBiased"], body: () => {
+function downsampleFirstBiased(list) {
+  const N = list.length;
+  if (N === 0) return [];
+
+  // 1) Compute base target size = floor(N/10)
+  // 2) Ensure at least 20 slots (so first 20 always fit)
+  const target = Math.max(20, Math.floor(N / 10));
+
+  // 3) Pick indices by quadratic mapping (k/(target-1))^2 * (N-1)
+  const idxSet = new Set();
+  for (let k = 0; k < target; k++) {
+    // t runs from 0 to 1
+    const t = target === 1 ? 0 : k / (target - 1);
+    // square to bias toward t=0 (start of list)
+    const i = Math.floor(t * t * (N - 1));
+    idxSet.add(i);
+  }
+
+  // 4) Ensure first 20 always included
+  for (let i = 0; i < 20 && i < N; i++) {
+    idxSet.add(i);
+  }
+
+  // 5) Build final array in original order
+  const indices = Array.from(idxSet).sort((a, b) => a - b);
+  return indices.map(i => list[i]);
+}
+return {downsampleFirstBiased};
+}});
+
+define({id: "51c133d1", inputs: ["d3","downsampleFirstBiased","Plot","platformColorsStart","viewSelectedPlatform","platformColorsEnd"], outputs: ["scatterPlot"], body: (d3,downsampleFirstBiased,Plot,platformColorsStart,viewSelectedPlatform,platformColorsEnd) => {
+function scatterPlot(games, minPrice, maxPrice, meanProfit, { width } = {}) {
+  const meanLinePoints = d3.range(minPrice, maxPrice, 0.5).map(price => ({
+    x: price,
+    y: meanProfit / price
+  }));
+
+  const top5 = games.slice(0, 5);
+
+  games = downsampleFirstBiased(games);
+
+  const plot = Plot.plot({
+    width,
+    height: 500,
+    marginRight: 53,
+    x: {
+      label: "Price",
+      grid: true,
+      labelAnchor: "center",
+    },
+    y: {
+      label: "Downloads",
+      grid: true,
+    },
+    color: {
+      type: "linear",
+      domain: [0, d3.max(games, d => d.profit)],
+      range: [platformColorsStart[viewSelectedPlatform], platformColorsEnd[viewSelectedPlatform]],
+      interpolate: "hsl",
+      legend: true,
+      label: "Total Profit"
+    },
+    marks: [
+      Plot.dot(games, {
+        x: "price",
+        y: "downloads",
+        title: d => `${d.title} (${Math.round(d.profit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}€)`,
+        r: 5,
+        fill: g => g.profit,
+        fillOpacity: 0.8,
+      }),
+      Plot.text(top5.filter((_, i) => i % 2 === 0), {
+        x: "price",
+        y: "downloads",
+        text: "title",
+        dx: -8,
+        dy: -4,
+        fontSize: 12,
+        textAnchor: "end"
+      }),
+      Plot.text(top5.filter((_, i) => i % 2 === 1), {
+        x: "price",
+        y: "downloads",
+        text: "title",
+        dx: 8,
+        dy: 4,
+        fontSize: 12,
+        textAnchor: "start"
+      }),
+      Plot.line(meanLinePoints, {
+        x: "x",
+        y: "y",
+        stroke: "grey",
+        strokeWidth: 2,
+      })
+    ]
+  });
+
+  // Create the SVG container
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  const svgWidth = 180;
+  const svgHeight = 30;
+  svg.setAttribute('width', svgWidth);
+  svg.setAttribute('height', svgHeight);
+  svg.style.position = 'absolute';
+  svg.style.top = '10px';
+  svg.style.right = `30px`;
+  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+  line.setAttribute('x1', 10);
+  line.setAttribute('y1', 15);
+  line.setAttribute('x2', 28);
+  line.setAttribute('y2', 15);
+  line.setAttribute('stroke', "grey");
+  line.setAttribute('stroke-width', 2);
+  const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  label.setAttribute("x", 35);
+  label.setAttribute("y", svgHeight / 2 + 3);
+  label.setAttribute("font-size", "12px");
+  label.setAttribute("fill", "black");
+  label.textContent = `Average yield (${Math.round(meanProfit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}€)`;
+  const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  border.setAttribute("x", 0);
+  border.setAttribute("y", 0);
+  border.setAttribute("width", svgWidth);
+  border.setAttribute("height", svgHeight);
+  border.setAttribute("fill", "none");
+  border.setAttribute("stroke", "#cacaca");
+  border.setAttribute("stroke-width", 1);
+  border.setAttribute("rx", "6");
+  border.setAttribute("ry", "4");
+  svg.appendChild(border);
+  svg.appendChild(line);
+  svg.appendChild(label);
+
+  // Container div
+  const containerDiv = document.createElement('div');
+  containerDiv.style.position = 'relative';
+  containerDiv.style.width = `${width}px`;
+  containerDiv.style.height = '550px';
+  containerDiv.appendChild(plot);
+  containerDiv.appendChild(svg);
+
+  return containerDiv;
+}
+return {scatterPlot};
+}});
+
+define({id: "b24d45d1", inputs: ["Inputs","platformSpecificDataMap","view"], outputs: ["selectedPlatform","viewSelectedPlatform"], body: (Inputs,platformSpecificDataMap,view) => {
+const selectedPlatform = Inputs.radio(
+  Object.keys(platformSpecificDataMap).slice(0, -1), {
+    label: "Platform:",
+    multiple: false,
+    value: "Playstation", // default
+  });
+let viewSelectedPlatform = view(selectedPlatform);
+return {selectedPlatform,viewSelectedPlatform};
+}});
+
+define({id: "f8b538f2", inputs: ["platformSpecificDataMap","viewSelectedPlatform","scatterPlot"], outputs: ["displayScatterPlot"], body: (platformSpecificDataMap,viewSelectedPlatform,scatterPlot) => {
+function displayScatterPlot(width) {
+  const [games, minPrice, maxPrice, meanProfit] = platformSpecificDataMap[viewSelectedPlatform];
+  return scatterPlot(games, minPrice, maxPrice, meanProfit, { width });
+}
+return {displayScatterPlot};
+}});
+
+define({id: "820db7eb", mode: "inline", inputs: ["selectedPlatform","display"], body: async (selectedPlatform,display) => {
+display(await(
+selectedPlatform
+))
+}});
+
+define({id: "4102f57c", mode: "inline", inputs: ["resize","displayScatterPlot","display"], body: async (resize,displayScatterPlot,display) => {
+display(await(
+resize((width) => displayScatterPlot(width))
+))
+}});
+
+define({id: "9a3cbd06", inputs: ["Inputs","platformSpecificDataMap","view"], outputs: ["selectedPlatform2","viewSelectedPlatform2"], body: (Inputs,platformSpecificDataMap,view) => {
+const selectedPlatform2 = Inputs.radio(
+  Object.keys(platformSpecificDataMap), {
+    label: "Platform:",
+    multiple: false,
+    value: "All", // default
+  });
+let viewSelectedPlatform2 = view(selectedPlatform2);
+return {selectedPlatform2,viewSelectedPlatform2};
+}});
+
+define({id: "22877bba", inputs: ["Inputs","view"], outputs: ["selectedDevPub","viewSelectedDevPub"], body: (Inputs,view) => {
+const selectedDevPub = Inputs.radio(
+  ["Developers", "Publishers"], {
+    label: "Type:",
+    multiple: false,
+    value: "Developers", // default
+  });
+let viewSelectedDevPub = view(selectedDevPub);
+return {selectedDevPub,viewSelectedDevPub};
+}});
+
+define({id: "6be7febd", inputs: ["platformSpecificDataMap","viewSelectedPlatform2","viewSelectedDevPub","html"], outputs: ["displayMostProfitable"], body: (platformSpecificDataMap,viewSelectedPlatform2,viewSelectedDevPub,html) => {
+function displayMostProfitable(width) {
+  const [games, , , ] = platformSpecificDataMap[viewSelectedPlatform2];
+  
+  const developersGames = [];
+  for (const game of games) {
+    if (viewSelectedDevPub == "Developers") {
+      for (const dev of game.developers) {
+        developersGames.push([dev, game.profit]);
+      }
+    } else {
+      for (const dev of game.publishers) {
+        developersGames.push([dev, game.profit]);
+      }
+    }
+  }
+
+  const agg = {};
+  for (const [name, profit] of developersGames) {
+    if (!agg[name]) {
+      agg[name] = { count: 0, totalProfit: 0 };
+    }
+    agg[name].count += 1;
+    agg[name].totalProfit += profit;
+  }
+
+  const sorted = Object.entries(agg)
+    .map(([name, {count, totalProfit}]) => ({ name, count, totalProfit }))
+    .sort((a, b) => b.totalProfit - a.totalProfit);
+
+  const top3 = sorted.slice(0, 3); //  { name: "", count: 0, totalProfit: 0 },
+
+  function prettyProfit(number) {
+    return number.toFixed(0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  return html`<table>
+  <tr>
+    <th></th>
+    <th>${viewSelectedDevPub.slice(0,-1)}</th>
+    <th>Profit</th>
+  </tr>
+  <tr>
+    <td>1.</td>
+    <td>${top3[0].name}</td>
+    <td>${prettyProfit(top3[0].totalProfit)}€</td>
+  </tr>
+  <tr>
+    <td>2.</td>
+    <td>${top3[1].name}</td>
+    <td>${prettyProfit(top3[1].totalProfit)}€</td>
+  </tr>
+  <tr>
+    <td>3.</td>
+    <td>${top3[2].name}</td>
+    <td>${prettyProfit(top3[2].totalProfit)}€</td>
+  </tr>
+  </table>`;
+}
+return {displayMostProfitable};
+}});
+
+define({id: "9a916d1d", mode: "inline", inputs: ["selectedPlatform2","display"], body: async (selectedPlatform2,display) => {
+display(await(
+selectedPlatform2
+))
+}});
+
+define({id: "9e0593d7", mode: "inline", inputs: ["selectedDevPub","display"], body: async (selectedDevPub,display) => {
+display(await(
+selectedDevPub
+))
+}});
+
+define({id: "9f8a497a", mode: "inline", inputs: ["resize","displayMostProfitable","display"], body: async (resize,displayMostProfitable,display) => {
+display(await(
+resize((width) => displayMostProfitable(width))
+))
+}});
+
+</script>
+</head>
+<body>
+<input id="observablehq-sidebar-toggle" type="checkbox" title="Toggle sidebar">
+<label id="observablehq-sidebar-backdrop" for="observablehq-sidebar-toggle"></label>
+<nav id="observablehq-sidebar">
+  <ol>
+    <label id="observablehq-sidebar-close" for="observablehq-sidebar-toggle"></label>
+    <li class="observablehq-link"><a href="./">Who are gamers?</a></li>
+  </ol>
+  <ol>
+    <li class="observablehq-link"><a href="./platform-analysis">What do gamers play on?</a></li>
+    <li class="observablehq-link"><a href="./country-analysis">Where are gamers?</a></li>
+    <li class="observablehq-link"><a href="./review-analysis">What do gamers think?</a></li>
+    <li class="observablehq-link"><a href="./genre-analyse">Which genres do gamers play?</a></li>
+    <li class="observablehq-link observablehq-link-active"><a href="./profit-analysis">How do gamers spend?</a></li>
+  </ol>
+</nav>
+<script>{const e=document.querySelector("#observablehq-sidebar"),o=document.querySelector("#observablehq-sidebar-toggle"),r=sessionStorage.getItem("observablehq-sidebar");r?o.checked=r==="true":o.indeterminate=!0;for(const t of document.querySelectorAll("#observablehq-sidebar summary")){const s=t.parentElement;switch(sessionStorage.getItem(`observablehq-sidebar:${t.textContent}`)){case"true":s.open=!0;break;case"false":s.classList.contains("observablehq-section-active")||(s.open=!1);break}}addEventListener("beforeunload",()=>sessionStorage.setItem("observablehq-sidebar-scrolly",`${e.scrollTop}`));const a=sessionStorage.getItem("observablehq-sidebar-scrolly");a!=null&&(e.style.cssText="overflow: hidden;",e.scrollTop=+a,e.style.cssText="");}</script>
+<div id="observablehq-center">
+<aside id="observablehq-toc" data-selector="h1:not(:first-of-type)[id], h2:first-child[id], :not(h1) + h2[id]">
+<nav>
+<div>Contents</div>
+<ol>
+<li class="observablehq-secondary-link"><a href="#game-yields">Game yields</a></li>
+<li class="observablehq-secondary-link"><a href="#most-profitable-developers-and-publishers">Most profitable developers and publishers</a></li>
+</ol>
+</nav>
+</aside>
+<main id="observablehq-main" class="observablehq">
+<h1 id="how-do-gamers-spend" tabindex="-1"><a class="observablehq-header-anchor" href="#how-do-gamers-spend">How do gamers spend?</a></h1>
+<br>
+<div class="observablehq observablehq--block"><!--:a4ad7b06:--></div>
+<!-- All the data & functions related to interpreting genres. -->
+<div class="observablehq observablehq--block"><!--:c4d4234c:--></div>
+<!-- ============================================================================================================== -->
+<!-- ============================================================================================================== -->
+<div class="observablehq observablehq--block"><!--:4681d766:--></div>
+<!-- Scatter Plot -->
+<div class="observablehq observablehq--block"><!--:51c133d1:--></div>
+<!-- Scatter Plot adaptive selectors -->
+<div class="observablehq observablehq--block"><!--:b24d45d1:--></div>
+<!-- Scatter Plot adaptive -->
+<div class="observablehq observablehq--block"><!--:f8b538f2:--></div>
+<h1 id="game-yields" tabindex="-1"><a class="observablehq-header-anchor" href="#game-yields">Game yields</a></h1>
+<div class="card">
+  <observablehq-loading></observablehq-loading><!--:820db7eb:-->
+</div>
+<div class="card">
+  <h2>Game Price (€) vs Downloads</h2>
+  <observablehq-loading></observablehq-loading><!--:4102f57c:-->
+</div>
+<p>Every dot on this scatter plot represents a game. Along the x-axis, you see the game's selling price; on the y-axis, the number of downloads or units sold. If you multiply those two, you get the game's yield; its total revenue. A grey line cuts through the plot, marking the average yield of all games. Dots that fall below this line represent games earning less than average, while those above are outperforming.</p>
+<p>Each dot is also colored by yield: the darker the dot, the higher the total yield it represents.</p>
+<p>Now, when comparing platforms, a few interesting patterns emerge. Xbox games show a noticeably higher average yield than those on PlayStation or Steam. This might be due to factors like a more spend-heavy user base, better monetization strategies, or fewer but more premium titles.</p>
+<p>While PlayStation edges out Steam in average yield, the difference isn’t dramatic. What does stand out, however, is PlayStation's greater number of extremely high-yielding games, each bringing in over 500,000 euros.</p>
+<!-- ============================================================================================================== -->
+<!-- ============================================================================================================== -->
+<!-- Most Profitable adaptive selectors -->
+<div class="observablehq observablehq--block"><!--:9a3cbd06:--></div>
+<div class="observablehq observablehq--block"><!--:22877bba:--></div>
+<!-- Most Profitable adaptive -->
+<div class="observablehq observablehq--block"><!--:6be7febd:--></div>
+<h1 id="most-profitable-developers-and-publishers" tabindex="-1"><a class="observablehq-header-anchor" href="#most-profitable-developers-and-publishers">Most profitable developers and publishers</a></h1>
+<div class="card">
+  <observablehq-loading></observablehq-loading><!--:9a916d1d:-->
+  <observablehq-loading></observablehq-loading><!--:9e0593d7:-->
+</div>
+<div class="card">
+  <h2>Top 3 most profitable developers:</h2>
+  <observablehq-loading></observablehq-loading><!--:9f8a497a:-->
+</div></main>
+<footer id="observablehq-footer">
+<nav><a rel="prev" href="./genre-analyse"><span>Which genres do gamers play?</span></a></nav>
+<div>Built with <a href="https://observablehq.com/" target="_blank" rel="noopener noreferrer">Observable</a> on <a title="2025-05-18T19:37:48">May 18, 2025</a>.</div>
+</footer>
+</div>
+</body>
+</html>
