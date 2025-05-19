@@ -1,11 +1,20 @@
 ---
-theme: dashboard
+
 title: Which genres do gamers play?
 toc: true
 ---
 
 # Which genres do gamers play?
 </br>
+
+```js
+const platformColors = {
+  "Playstation": "#8F00FF",
+  "Steam":       "#FF8F00",
+  "Xbox":        "#00FF8F",
+  "All":         "#333333"
+};
+```
 
 <!-- All the data & functions related to interpreting genres. -->
 ```js
@@ -124,9 +133,9 @@ function buildMaps(platformCSVs) {
 }
 
 const mapsByPlatform = {
-  Playstation: buildMaps([gamesCSVPlaystation]),
   Steam:       buildMaps([gamesCSVSteam]),
-  XBox:        buildMaps([gamesCSVXbox]),
+  Playstation: buildMaps([gamesCSVPlaystation]),
+  Xbox:        buildMaps([gamesCSVXbox]),
   All:         buildMaps([gamesCSVPlaystation, gamesCSVSteam, gamesCSVXbox])
 };
 
@@ -200,7 +209,8 @@ function heatmap(matrix, genres, { width } = {}) {
     color: {
       legend: true,
       type: "sequential",
-      scheme: "blues",
+      range: ["white", platformColors[viewSelectedPlatform]],
+      interpolate: "hsl",
       domain: [0, d3.max(cells, c => c.value)],
       label: "Overlap between genres (%)"
     },
@@ -221,7 +231,7 @@ function heatmap(matrix, genres, { width } = {}) {
 ```js
 const selectedPlatform = Inputs.radio(
   Object.keys(mapsByPlatform), {
-    label: "Platform:",
+    label: "",
     multiple: false,
     value: "Steam", // default
   });
@@ -229,9 +239,9 @@ let viewSelectedPlatform = view(selectedPlatform);
 ```
 
 ```js
-const selectedMinGamesAmount = Inputs.range(
+const selectedMinGamesAmount = Inputs.number(
   [0, 1000], {
-    label: "Minimum # games per genre:",
+    label: "",
     step: 1, 
     value: 100, // default
   });
@@ -240,11 +250,12 @@ let viewSelectedMinGamesAmount = view(selectedMinGamesAmount);
 
 ```js
 const selectedGenres = Inputs.checkbox(genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), {
-    label: "Included genres:",
+    label: "",
     multiple: true,
     value: genresAboveMinGamesAmount(viewSelectedMinGamesAmount, viewSelectedPlatform), // default
 });
 let viewSelectedGenres = view(selectedGenres);
+selectedGenres.classList.add("my‑checkbox‑group");
 ```
 
 <!-- Stat card -->
@@ -265,7 +276,7 @@ function statCard(selectedPlatform, selectedMinGamesAmount) {
   // Calculate percentage
   const percentage = (selectedGamesCount / totalGames) * 100;
 
-  const name = "Percentage games included:";
+  const name = "Included games:";
   const number = percentage.toFixed(2)
 
   const container = document.createElement("div");
@@ -296,9 +307,26 @@ function displayHeatmap(width) {
 ## Correlation between genres
 
 <div class="card">
-  ${selectedPlatform}
-  ${selectedMinGamesAmount}
-  ${selectedGenres}
+  <div class="card">
+    ${selectedPlatform}
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        padding-left: 5px;
+      "
+    >
+      <span>Minimum amount of games:</span>
+      <span style="width: 65px;">
+        ${selectedMinGamesAmount}
+      </span>
+    </div>
+  </div>
+  <div class="card">
+    ${selectedGenres}
+  </div>
 </div>
 
 <div class="card">
@@ -306,34 +334,45 @@ function displayHeatmap(width) {
   ${statCard(viewSelectedPlatform, viewSelectedMinGamesAmount)}
 </div>
 
-The darkness of a square represents (in %) how many games that have the genre on the y-axis, also have the genre on the x-axis. For example, if we want to know the correlation between Action games and Violent games, we can look at it in two ways:
-1. Action (y-axis)  & Violent (x-axis) -> 0.8% of Action games are also Violent.
-2. Violent (y-axis) & Action  (x-axis) -> 71.8% of Violent games are also Action.
+Imagine stepping into the vast world of video games today; there's a genre for everyone. Some players crave the thrill of fast-paced action, while others prefer to take it slow, exploring rich worlds and intricate stories at their own pace. With so many genres out there, you might start to wonder: how are they all connected? Could certain genres be more closely tied together than others?
 
-Some observations:
-- Almost all Gore games are also marked Violent, which makes sense.
-- About 75% of all games are Indie. An outlier is Massively Multiplayer games. This is probably because they are harder to develop and require more funding and programming.
-- Some of the games are not actual games, but rather utility applications.
+To explore this, look at the grid; on one side, we list genres as *Genre Y*, and across the top, we list them again as *Genre X*. In each square of this grid, the darkness of the shade tells us one thing: what percentage of games in *Genre Y* also belong to *Genre X*. The darker the square, the stronger the connection.
+
+Take the relationship between **Action** and **Violent** games. If you look at it from the perspective of **Action** games, only 0.8% are also tagged as **Violent**. But flip it around; among **Violent** games, a massive 71.8% are also **Action**. What does that tell us? Likely, **Action** is a broader, more general category, while **Violent** is a more specific theme that fits within it.
+
+Another clear example is the bond between **Gore** and **Violent**. An incredible 85.3% of **Gore** games are also marked as **Violent**, showing a near one-to-one relationship; games filled with gore are almost always violent in nature.
+
+But the graph reveals more than just genre overlaps. One surprising insight is the sheer dominance of **Indie** games; about 75% of all games fall under this label. On the opposite end of the spectrum, **Massively Multiplayer** games are rarely indie. That makes sense; these massive worlds demand far more resources, time, and funding to bring to life.
+
+Then there’s another curious discovery: not all entries are really games at all. Some are actually utility applications, tools rather than entertainment. And when you look at the relationship; or rather, the lack of it: between **Indie** and **Utility**, a clear divide appears. Indie games stick firmly to the realm of play, while utilities remain in a world of function.
 
 <!-- ============================================================================================================== -->
-<br></br>
+
 <!-- ============================================================================================================== -->
 
 <!-- Line Chart plot -->
 ```js
-import iwanthue from "iwanthue";
+//import iwanthue from "iwanthue";
+//const [ , , genreYearCountMapAllConstant, _ ] = mapsByPlatform[Object.keys(mapsByPlatform)[3]];
+//const allGenres = Array.from(genreYearCountMapAllConstant.keys()).sort();
+//const colorScale = d3.scaleOrdinal(allGenres, iwanthue(allGenres.length))
+
+const [ , , genreYearCountMapAllConstant, _ ] = mapsByPlatform[Object.keys(mapsByPlatform)[3]];
+const allGenres = Array.from(genreYearCountMapAllConstant.keys()).sort();
+const colors = d3.quantize(d3.interpolateTurbo, allGenres.length);
+const colorScale = d3.scaleOrdinal()
+  .domain(allGenres)
+  .range(colors);
 
 function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { width } = {}) {
 
-  console.log(yearGamesMap)
 
   // do not use 2025 as it is not complete
   if (years[years.length-1] == 2025) {
     years = years.slice(0, -1); 
   }
 
-  const allGenres = Array.from(genreYearCountMap.keys()).sort();
-  const colorScale = d3.scaleOrdinal(allGenres, iwanthue(allGenres.length))
+
 
   const points = [];
   genres.forEach((genre) => {
@@ -418,7 +457,7 @@ function lineChart(genreYearCountMap, yearGamesMap, genres, years, relative, { w
 ```js
 const selectedPlatform2 = Inputs.radio(
   Object.keys(mapsByPlatform), {
-    label: "Platform:",
+    label: "",
     multiple: false,
     value: "Steam", // default
   });
@@ -426,9 +465,9 @@ let viewSelectedPlatform2 = view(selectedPlatform2);
 ```
 
 ```js
-const selectedMinGamesAmount2 = Inputs.range(
+const selectedMinGamesAmount2 = Inputs.number(
   [100, 1000], {
-    label: "Minimum # games per genre:",
+    label: "",
     step: 1, 
     value: 200, // default
   });
@@ -437,11 +476,12 @@ let viewSelectedMinGamesAmount2 = view(selectedMinGamesAmount2);
 
 ```js
 const selectedGenres2 = Inputs.checkbox(genresAboveMinGamesAmount(viewSelectedMinGamesAmount2, viewSelectedPlatform2), {
-    label: "Included genres:",
+    label: "",
     multiple: true,
     value: ["Action", "Strategy", "Indie", "Free To Play"]
 });
 let viewSelectedGenres2 = view(selectedGenres2);
+selectedGenres2.classList.add("my‑checkbox‑group");
 ```
 
 ```js
@@ -474,14 +514,32 @@ function displayLinechart(width) {
 ## Genre release trend
 
 <div class="card">
-  ${selectedPlatform2}
-  ${selectedMinGamesAmount2}
-  ${selectedGenres2}
-</div>
-
-<div class="card">
-  <p>Selecting relative will normalize the game count to the total # games for that year.</p>
-  ${selectedRelative2}
+  <div class="card">
+    ${selectedPlatform2}
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.85rem;
+        padding-left: 5px;
+      "
+    >
+      <span>Minimum amount of games:</span>
+      <span style="width: 65px;">
+        ${selectedMinGamesAmount2}
+      </span>
+    </div>
+  </div>
+  <div class="card">
+    ${selectedGenres2}
+  </div>
+  <div class="card">
+    ${selectedRelative2}
+    <i style="color: grey;">
+    (The relative option will normalize the a genre's game count to the total amount of games released that year.)
+    </i>
+  </div>
 </div>
 
 <div class="card">
@@ -489,8 +547,8 @@ function displayLinechart(width) {
   ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
 </div>
 
-Action and Strategy games were more popular in the early 2000's, compared to now.
-This could be explained because as the amount of games increase, more specific sub-genres are being used.
-The term Indie was not really in use at that time, but became mainstream quickly after.
-It is difficult to predict which genres will become more popular in the future; most stay constant.
-One genre that is seeing a slow but steady increase, however, is Free To Play games.
+Back in the early 2000s, **Action** and **Strategy** games reigned supreme. They were the go-to genres, dominating the gaming scene. But if you compare that to today, their popularity has declined. Why? One likely reason is the explosion in the number of games being released—along with that came a shift toward more specific and narrowly defined sub-genres. Instead of just Action, we now see tags like **Shooter**, **Fighting**, or **Racing**.
+
+Another major shift came with the rise of the **Indie** label. In the early 2000s, the term was rarely used, if at all. But that changed quickly. As digital distribution platforms grew, so did the visibility and viability of small, independent developers. Now, **Indie** has become one of the most common and recognizable tags in gaming, as was also proven in earlier correlation graph.
+
+As for the future of genre trends, it’s hard to say which ones will break out next. Most genres tend to remain relatively stable over time. However, there is one that’s slowly but surely gaining traction: **Free To Play**. With more developers experimenting with monetization models and players looking for accessible experiences, **Free To Play** continues its steady rise, thus hinting at where part of the industry might be heading next.

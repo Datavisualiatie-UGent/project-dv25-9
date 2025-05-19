@@ -1,5 +1,5 @@
 ---
-theme: dashboard
+
 title: How do gamers spend?
 toc: true
 ---
@@ -7,6 +7,20 @@ toc: true
 # How do gamers spend?
 </br>
 
+```js
+const platformColorsStart = {
+  "Playstation": "#e3bfff",
+  "Steam":       "#FFE3BF",
+  "Xbox":        "#BFFFE3",
+  "All":         "#cccccc"
+};
+const platformColorsEnd = {
+  "Playstation": "#000000",
+  "Steam":       "#000000",
+  "Xbox":        "#000000",
+  "All":         "#000000"
+};
+```
 
 <!-- All the data & functions related to interpreting genres. -->
 ```js
@@ -26,9 +40,12 @@ const gamesCSVSteam           = await FileAttachment(
 const purchasedGamesCSVSteam  = await FileAttachment(
     "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/purchased_games.csv"
 ).csv();
-const pricesCSVSteam          = await FileAttachment(
-    "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices.csv"
-).csv();
+
+const files = [
+  FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices_part_1.csv"),
+  FileAttachment("data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/steam/prices_part_2.csv"),
+];
+const pricesCSVSteam = (await Promise.all(files.map(f => f.csv({ typed: true })))).flat();
 
 const gamesCSVXbox           = await FileAttachment(
     "./data/datasets/artyomkruglov/gaming-profiles-2025-steam-playstation-xbox/versions/1/xbox/games.csv"
@@ -121,9 +138,9 @@ function platformSpecificData(platforms) {
 }
 
 const platformSpecificDataMap = {
-  Playstation: platformSpecificData(["Playstation"]),
   Steam:       platformSpecificData(["Steam"]),
-  XBox:        platformSpecificData(["Xbox"]),
+  Playstation: platformSpecificData(["Playstation"]),
+  Xbox:        platformSpecificData(["Xbox"]),
   All:         platformSpecificData(["Playstation", "Steam", "Xbox"])
 };
 
@@ -197,15 +214,16 @@ function scatterPlot(games, minPrice, maxPrice, meanProfit, { width } = {}) {
     color: {
       type: "linear",
       domain: [0, d3.max(games, d => d.profit)],
-      range: ["lightblue", "red"],
+      range: [platformColorsStart[viewSelectedPlatform], platformColorsEnd[viewSelectedPlatform]],
+      interpolate: "hsl",
       legend: true,
-      label: "Total Profit"
+      label: "Total Yield"
     },
     marks: [
       Plot.dot(games, {
         x: "price",
         y: "downloads",
-        title: "title",
+        title: d => `${d.title} (${Math.round(d.profit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}€)`,
         r: 5,
         fill: g => g.profit,
         fillOpacity: 0.8,
@@ -216,7 +234,6 @@ function scatterPlot(games, minPrice, maxPrice, meanProfit, { width } = {}) {
         text: "title",
         dx: -8,
         dy: -4,
-        fill: "white",
         fontSize: 12,
         textAnchor: "end"
       }),
@@ -226,14 +243,13 @@ function scatterPlot(games, minPrice, maxPrice, meanProfit, { width } = {}) {
         text: "title",
         dx: 8,
         dy: 4,
-        fill: "white",
         fontSize: 12,
         textAnchor: "start"
       }),
       Plot.line(meanLinePoints, {
         x: "x",
         y: "y",
-        stroke: "red",
+        stroke: "grey",
         strokeWidth: 2,
       })
     ]
@@ -241,22 +257,39 @@ function scatterPlot(games, minPrice, maxPrice, meanProfit, { width } = {}) {
 
   // Create the SVG container
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  const svgWidth = 1;
+  const svgWidth = 180;
   const svgHeight = 30;
-  const marginRight = -117;
   svg.setAttribute('width', svgWidth);
   svg.setAttribute('height', svgHeight);
   svg.style.position = 'absolute';
-  svg.style.top = '0px';
-  svg.style.right = `${svgWidth - marginRight}px`;
+  svg.style.top = '10px';
+  svg.style.right = `30px`;
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   line.setAttribute('x1', 10);
   line.setAttribute('y1', 15);
-  line.setAttribute('x2', 30);
+  line.setAttribute('x2', 28);
   line.setAttribute('y2', 15);
-  line.setAttribute('stroke', "red");
+  line.setAttribute('stroke', "grey");
   line.setAttribute('stroke-width', 2);
+  const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  label.setAttribute("x", 35);
+  label.setAttribute("y", svgHeight / 2 + 3);
+  label.setAttribute("font-size", "12px");
+  label.setAttribute("fill", "black");
+  label.textContent = `Average yield (${Math.round(meanProfit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}€)`;
+  const border = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  border.setAttribute("x", 0);
+  border.setAttribute("y", 0);
+  border.setAttribute("width", svgWidth);
+  border.setAttribute("height", svgHeight);
+  border.setAttribute("fill", "none");
+  border.setAttribute("stroke", "#cacaca");
+  border.setAttribute("stroke-width", 1);
+  border.setAttribute("rx", "6");
+  border.setAttribute("ry", "4");
+  svg.appendChild(border);
   svg.appendChild(line);
+  svg.appendChild(label);
 
   // Container div
   const containerDiv = document.createElement('div');
@@ -289,7 +322,7 @@ function displayScatterPlot(width) {
 }
 ```
 
-# Game profits
+# Game yields
 
 <div class="card">
   ${selectedPlatform}
@@ -300,10 +333,16 @@ function displayScatterPlot(width) {
   ${resize((width) => displayScatterPlot(width))}
 </div>
 
-This scatter plot shows for each game the selling price on the x-axis and the amount of downloads, or amount of units sold, on the y-axis. The profit is calculated as the amount of downloads times the price. The mean profit of all games is shown as the red line. Games below this line have less profit than the average game. Games above the line have more. The color of a dot indicates the total profit; the redder, the higher.
+Every dot on this scatter plot represents a game. Along the x-axis, you see the game's selling price; on the y-axis, the number of downloads or units sold. If you multiply those two, you get the game's yield; its total revenue. A grey line cuts through the plot, marking the average yield of all games. Dots that fall below this line represent games earning less than average, while those above are outperforming.
+
+Each dot is also colored by yield: the darker the dot, the higher the total yield it represents.
+
+Now, when comparing platforms, a few interesting patterns emerge. Xbox games show a noticeably higher average yield than those on PlayStation or Steam. This might be due to factors like a more spend-heavy user base, better monetization strategies, or fewer but more premium titles.
+
+While PlayStation edges out Steam in average yield, the difference isn’t dramatic. What does stand out, however, is PlayStation's greater number of extremely high-yielding games, each bringing in over 500,000 euros.
 
 <!-- ============================================================================================================== -->
-<br></br>
+
 <!-- ============================================================================================================== -->
 
 <!-- Most Profitable adaptive selectors -->

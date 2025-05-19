@@ -1,5 +1,4 @@
 ---
-theme: dashboard
 title: What do gamers play on?
 toc: true
 ---
@@ -394,7 +393,7 @@ function cumulativeChart(width) {
     },
     color: {
       domain: ["Steam", "PlayStation", "Xbox"],
-      range: ["#0066cc", "#e0e0e0", "#107C10"],
+      range: ["#FF8F00", "#8F00FF", "#00FF8F"],
       legend: true
     },
     marks: [
@@ -489,7 +488,7 @@ function monthlyChart(width) {
     },
     color: {
       domain: ["Steam", "PlayStation", "Xbox"],
-      range: ["#0066cc", "#e0e0e0", "#107C10"],
+      range: ["#FF8F00", "#8F00FF", "#00FF8F"],
       legend: true
     },
     marks: [
@@ -540,7 +539,7 @@ function monthlyReleasesChart(width) {
     },
     color: {
       domain: ["Steam", "PlayStation", "Xbox"],
-      range: ["#0066cc", "#e0e0e0", "#107C10"],
+      range: ["#FF8F00", "#8F00FF", "#00FF8F"],
       legend: true
     },
     marks: [

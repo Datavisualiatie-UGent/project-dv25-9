@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
+@import url("observablehq:default.css");
+@import url("observablehq:theme-air.css");
+
+:root {
+    --sans-serif: "Inter", sans-serif;
+}
+
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: var(--sans-serif);
+}
+
+
+.my‑checkbox‑group div {
+    display: grid;
+    /* 3 columns of equal width; change “3” to however many columns you need */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* gap: row-gap column-gap */
+    gap: 0.0rem 0.1rem;
+}
+
+.my‑checkbox‑group div label {
+    /* make label contents align nicely */
+    display: flex;
+    align-items: center;
+    /* optional: tweak text color or spacing */
+    color: #333;
+    font-size: 0.7rem;
+}
+  
