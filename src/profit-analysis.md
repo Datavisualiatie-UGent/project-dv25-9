@@ -216,7 +216,7 @@ function scatterPlot(games, minPrice, maxPrice, meanProfit, { width } = {}) {
       range: [platformColorsStart[viewSelectedPlatform], platformColorsEnd[viewSelectedPlatform]],
       interpolate: "hsl",
       legend: true,
-      label: "Total Profit"
+      label: "Total Yield"
     },
     marks: [
       Plot.dot(games, {
