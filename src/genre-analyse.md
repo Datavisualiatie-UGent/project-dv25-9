@@ -1,6 +1,6 @@
 ---
 theme: dashboard
-title: Genre analysis
+title: Which genres do gamers play?
 toc: true
 ---
 

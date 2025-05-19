@@ -1,6 +1,6 @@
 ---
 theme: dashboard
-title: Profit analysis
+title: How do gamers spend?
 toc: true
 ---
 
