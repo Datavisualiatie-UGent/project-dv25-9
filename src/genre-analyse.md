@@ -335,15 +335,15 @@ function displayHeatmap(width) {
 
 Imagine stepping into the vast world of video games today; there's a genre for everyone. Some players crave the thrill of fast-paced action, while others prefer to take it slow, exploring rich worlds and intricate stories at their own pace. With so many genres out there, you might start to wonder: how are they all connected? Could certain genres be more closely tied together than others?
 
-To explore this, look at the grid; on one side, we list genres as Genre Y, and across the top, we list them again as Genre X. In each square of this grid, the darkness of the shade tells us one thing: what percentage of games in genre Y also belong to genre X. The darker the square, the stronger the connection.
+To explore this, look at the grid; on one side, we list genres as *Genre Y*, and across the top, we list them again as *Genre X*. In each square of this grid, the darkness of the shade tells us one thing: what percentage of games in *Genre Y* also belong to *Genre X*. The darker the square, the stronger the connection.
 
-Take the relationship between Action and Violent games. If you look at it from the perspective of Action games, only 0.8% are also tagged as Violent. But flip it around; among Violent games, a massive 71.8% are also Action. What does that tell us? Likely, Action is a broader, more general category, while Violent is a more specific theme that fits within it.
+Take the relationship between **Action** and **Violent** games. If you look at it from the perspective of **Action** games, only 0.8% are also tagged as **Violent**. But flip it around; among **Violent** games, a massive 71.8% are also **Action**. What does that tell us? Likely, **Action** is a broader, more general category, while **Violent** is a more specific theme that fits within it.
 
-Another clear example is the bond between Gore and Violent. An incredible 85.3% of Gore games are also marked as Violent, showing a near one-to-one relationship; games filled with gore are almost always violent in nature.
+Another clear example is the bond between **Gore** and **Violent**. An incredible 85.3% of **Gore** games are also marked as **Violent**, showing a near one-to-one relationship; games filled with gore are almost always violent in nature.
 
-But the graph reveals more than just genre overlaps. One surprising insight is the sheer dominance of Indie games; about 75% of all games fall under this label. On the opposite end of the spectrum, Massively Multiplayer games are rarely Indie. That makes sense; these massive worlds demand far more resources, time, and funding to bring to life.
+But the graph reveals more than just genre overlaps. One surprising insight is the sheer dominance of **Indie** games; about 75% of all games fall under this label. On the opposite end of the spectrum, **Massively Multiplayer** games are rarely indie. That makes sense; these massive worlds demand far more resources, time, and funding to bring to life.
 
-Then there’s another curious discovery: not all entries are really games at all. Some are actually utility applications, tools rather than entertainment. And when you look at the relationship; or rather, the lack of it: between Indie and Utility, a clear divide appears. Indie games stick firmly to the realm of play, while utilities remain in a world of function.
+Then there’s another curious discovery: not all entries are really games at all. Some are actually utility applications, tools rather than entertainment. And when you look at the relationship; or rather, the lack of it: between **Indie** and **Utility**, a clear divide appears. Indie games stick firmly to the realm of play, while utilities remain in a world of function.
 
 <!-- ============================================================================================================== -->
 
@@ -546,8 +546,8 @@ function displayLinechart(width) {
   ${statCard(viewSelectedPlatform2, viewSelectedMinGamesAmount2)}
 </div>
 
-Back in the early 2000s, Action and Strategy games reigned supreme. They were the go-to genres, dominating the gaming scene. But if you compare that to today, their popularity has declined. Why? One likely reason is the explosion in the number of games being released—along with that came a shift toward more specific and narrowly defined sub-genres. Instead of just Action, we now see tags like Shooter, Fighting, or Racing.
+Back in the early 2000s, **Action** and **Strategy** games reigned supreme. They were the go-to genres, dominating the gaming scene. But if you compare that to today, their popularity has declined. Why? One likely reason is the explosion in the number of games being released—along with that came a shift toward more specific and narrowly defined sub-genres. Instead of just Action, we now see tags like **Shooter**, **Fighting**, or **Racing**.
 
-Another major shift came with the rise of the Indie label. In the early 2000s, the term was rarely used, if at all. But that changed quickly. As digital distribution platforms grew, so did the visibility and viability of small, independent developers. Now, Indie has become one of the most common and recognizable tags in gaming, as was also proven in earlier correlation graph.
+Another major shift came with the rise of the **Indie** label. In the early 2000s, the term was rarely used, if at all. But that changed quickly. As digital distribution platforms grew, so did the visibility and viability of small, independent developers. Now, **Indie** has become one of the most common and recognizable tags in gaming, as was also proven in earlier correlation graph.
 
-As for the future of genre trends, it’s hard to say which ones will break out next. Most genres tend to remain relatively stable over time. However, there is one that’s slowly but surely gaining traction: Free To Play. With more developers experimenting with monetization models and players looking for accessible experiences, Free To Play continues its steady rise, thus hinting at where part of the industry might be heading next.
+As for the future of genre trends, it’s hard to say which ones will break out next. Most genres tend to remain relatively stable over time. However, there is one that’s slowly but surely gaining traction: **Free To Play**. With more developers experimenting with monetization models and players looking for accessible experiences, **Free To Play** continues its steady rise, thus hinting at where part of the industry might be heading next.
